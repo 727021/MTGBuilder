@@ -1,1 +1,1 @@
-web: node app.js
+web: DEBUG=myapp:* npm start
