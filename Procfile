@@ -1,1 +1,1 @@
-web: DEBUG=myapp:* npm start
+web: DEBUG=mtgbuilder:* npm start
