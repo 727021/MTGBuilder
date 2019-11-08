@@ -1,1 +1,1 @@
-web: DEBUG=mtgbuilder:* npm start
+web: ./start.sh
