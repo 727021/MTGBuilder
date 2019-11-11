@@ -3,10 +3,10 @@ const {Client} = require('pg')
 var router = express.Router();
 
 const pgClient = new Client(process.env.DATABASE_URL || {
-    user: 'aschim',
+    user: 'node_app_mtg',
     host: 'localhost',
     database: 'mtgbuilder_dev',
-    password: 'aschim_dev_mtg',
+    password: 'node_app_mtg',
     port: 5432
 })
 pgClient.connect((err) => { if (err) console.error(err) })
