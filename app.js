@@ -4,13 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-var dashboardRouter = require('./routes/dashboard');
-var adminRouter = require('./routes/admin');
-var deckRouter = require('./routes/deck')
-var cardRouter = require('./routes/card')
-var profileRouter = require('./routes/profile')
-var loginRouter = require('./routes/login')
-var registerRouter = require('./routes/register')
+var indexRouter = require('./routes/index');
 
 var app = express();
 
@@ -24,22 +18,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', dashboardRouter);
-app.use('/dashboard', (req, res, next) => {
-  res.redirect('../')
-});
-app.use('/admin', adminRouter);
-app.use('/deck', deckRouter)
-app.use('/card', cardRouter)
-app.use('/profile', profileRouter)
-app.use('/profile', loginRouter)
-app.use('/profile', registerRouter)
-app.use('/login', (req, res, next) => {
-  res.redirect('../profile/login')
-})
-app.use('/register', (req, res, next) => {
-  res.redirect('../profile/register')
-})
+app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
