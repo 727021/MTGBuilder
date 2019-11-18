@@ -5,6 +5,15 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
+var cardRouter = require('./routes/card')
+var deckRouter = require('./routes/deck')
+var userRouter = require('./routes/user')
+var loginRouter = require('./routes/login')
+var registerRouter = require('./routes/register')
+var loginEndpoint = require('./routes/ajax/login')
+var cardEndpoint = require('./routes/ajax/card')
+var deckEndpoint = require('./routes/ajax/deck')
+var userEndpoint = require('./routes/ajax/user')
 
 var app = express();
 
@@ -19,6 +28,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+app.use('/card', cardRouter)
+app.use('/deck', deckRouter)
+app.use('/user', userRouter)
+app.use('/login', loginRouter)
+app.use('/register', registerRouter)
+app.use('/ajax/', loginEndpoint)
+app.use('/ajax/card', cardEndpoint)
+app.use('/ajax/deck', deckEndpoint)
+app.use('/ajax/user', userEndpoint)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

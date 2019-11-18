@@ -25,6 +25,7 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "mtgsdk": "^0.4.3",
+    "node-postgres": "^0.1.2",
     "pg": "^7.12.1"
   }
 }
