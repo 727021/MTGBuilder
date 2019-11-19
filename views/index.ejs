@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <%include partials/head %>
   </head>
   <body>
-    <h1><%= title %></h1>
-    <p>Coming soon!</p>
+    <%include partials/navbar %>
+    <div class="container mt-2 bg-dark">
+      <h1><%= title %></h1>
+      <p>Coming soon!</p>
+    </div>
+
+    <%include partials/scripts %>
   </body>
 </html>

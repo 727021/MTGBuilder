@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session')
+require('dotenv').config()
 
 var indexRouter = require('./routes/index');
 var cardRouter = require('./routes/card')
@@ -26,6 +28,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+var sess = {
+  secret: 'keyboard cat',
+  cookie: {},
+  resave: false,
+  saveUninitialized: true
+}
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+app.use(session(sess))
 
 app.use('/', indexRouter);
 app.use('/card', cardRouter)

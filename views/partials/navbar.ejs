@@ -1,0 +1,24 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">MTGBuilder</a>
+        <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="collapsibleNavId"
+            aria-expanded="false" aria-label="Toggle navigation"></button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarCollapse">
+            <form class="form-inline my-2 my-lg-0">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search..." aria-label="Search...">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom" title="Users"><i class="fas fa-user"></i></button><!-- Users -->
+                            <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom" title="Decks"><i class="fas fa-cube"></i></button><!-- Decks -->
+                            <button class="btn btn-primary" type="button" data-toggle="tooltip" data-placement="bottom" title="Cards"><i class="fas fa-th-large"></i></button><!-- Cards -->
+                        </div>
+                    </div>
+            </form>
+            <% if (locals.user) { %>
+            <span id="userLink" class="navbar-text">Welcome, <a href="/user/<%= user.id %>"><%= user.name %></a>. <button id="logout" class="btn btn-primary">Log Out</button></span>
+            <% } else { %>
+            <a href="/login" role="button" class="btn btn-primary ml-1">Log In</a>
+            <% } %>
+        </div>
+    </div>
+</nav>

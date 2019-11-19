@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder' });
+  res.render('index', { title: 'MTGBuilder', user: (req.session.user || false) });
 });
 
 module.exports = router;
