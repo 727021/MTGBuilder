@@ -2,7 +2,10 @@ var express = require('express')
 var router = express.Router()
 
 router.get('/', (req, res, next) => {
-    res.render('index', { title: 'MTGBuilder' })
+    if (req.session.user) {
+        return res.redirect('/')
+    }
+    res.render('login', { title: 'Log In - MTGBuilder', scripts: ['/js/login.js'], extra: 'Log In' })
 })
 
 module.exports = router

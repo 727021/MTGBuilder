@@ -15,10 +15,18 @@
                     </div>
             </form>
             <% if (locals.user) { %>
-            <span id="userLink" class="navbar-text">Welcome, <a href="/user/<%= user.id %>"><%= user.name %></a>. <button id="logout" class="btn btn-primary">Log Out</button></span>
+            <span id="userLink" class="ml-2"><a role="button" class="btn btn-primary" href="/user/<%= user.id %>" data-toggle="tooltip" data-placement="bottom" title="Profile"><%= user.name %></a> <button id="logout" class="btn btn-primary" data-toggle="tooltip" data-placement="bottom" title="Log Out"><i class="fas fa-sign-out-alt"></i></button></span>
             <% } else { %>
             <a href="/login" role="button" class="btn btn-primary ml-1">Log In</a>
             <% } %>
         </div>
     </div>
 </nav>
+    <div id="logoutToast" class="toast" style="position: absolute; top: 10px; right: 15px;" data-delay="1500">
+        <div class="toast-header">
+            <strong class="mr-auto">MTGBuilder</strong>
+        </div>
+        <div class="toast-body text-dark">
+            Log out successful.
+        </div>
+    </div>

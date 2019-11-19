@@ -2,12 +2,13 @@ var express = require('express')
 var router = express.Router()
 var db = require ('../../db')
 var bcrypt = require('bcrypt')
+var validator = require('validator')
 
 router.get('/login', (req, res, next) => {
-    db.query('SELECT a.account_id AS id, a.username, a.password, c.cl_type AS type FROM account a INNER JOIN common_lookup c ON a.type = c.common_lookup_id WHERE a.username = $1 OR a.email = $1 LIMIT 1', [req.query.user || ''], (err, result) => {
+    db.query('SELECT a.account_id AS id, a.username, a.password, c.cl_type AS type FROM account a INNER JOIN common_lookup c ON a.type = c.common_lookup_id WHERE a.username = $1 OR a.email = $1 LIMIT 1', [validator.escape(req.query.user || '')], (err, result) => {
         if (err) return res.send({user: null, error: err.message})
         if (result.rowCount === 1) {
-            bcrypt.compare(req.query.password || '', result.rows[0].password, (err, same) => {
+            bcrypt.compare(validator.escape(req.query.password || ''), result.rows[0].password, (err, same) => {
                 if (err) return res.send({user: null, error: err.message})
                 if (same) {
                     req.session.user = {

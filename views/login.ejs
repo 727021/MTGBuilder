@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%include partials/head %>
+</head>
+<body>
+    <%include partials/navbar-empty %>
+
+    <div class="container mt-2 bg-dark px-0">
+        <div class="alert alert-danger text-center mb-0" role="alert" style="display: none;" id="invalidLogin">
+            Invalid login
+        </div>
+        <div class="row pt-2">
+            <div class="col-1 col-md-4"></div>
+            <div class="col">
+                <div class="form-group text-center"><input class="form-control" type="text" name="username" id="username" placeholder="Username/email"></div>
+                <div class="form-group text-center"><input class="form-control" type="password" name="password" id="password" placeholder="Password"></div>
+                <div class="form-group text-center"><button id="btnLogin" class="btn btn-success" type="button">Log In</button></div>
+            </div>
+            <div class="col-1 col-md-4"></div>
+        </div>
+    </div>
+
+    <%include partials/scripts %>
+</body>
+</html>
