@@ -11,11 +11,23 @@ router.get('/', (req, res, next) => {
 
 // User details
 router.get('/:id', (req, res, next) => {
-    res.send({user: req.params.id})
+    let id = req.params.id
+    if (!Boolean(Number(id))) return res.send({user: null, error: 'ID is not a number'})
+    // Make use of the account_info view in the database
+    // Only get everything if the current user is an admin or the user we're looking up
+    let query = (req.session.user && (req.session.user.type == 'admin' || req.session.user.id == id) ? "SELECT * FROM account_info WHERE id = $1" : "SELECT username, status, type, joined, last_login FROM account_info WHERE id = $1")
+    db.query(query, [id], (err, result) => {
+        if (err) {
+            console.log(err)
+            return res.send({user: null, error: 'Database error'})
+        }
+        if (result.rowCount == 0) res.send({user: null, error: 'No user found'})
+        res.send(result.rows[0])
+    })
 })
 
 // Create user
-router.post('/', (req, res, next) => {
+router.post('/', function createUser(req, res, next) {
     let username = validator.trim(validator.escape(req.body.user))
     let email = validator.trim(validator.escape(req.body.email))
     let password = validator.trim(validator.escape(req.body.password))
@@ -48,7 +60,7 @@ router.post('/', (req, res, next) => {
     })
 })
 
-// Update user
+// Update or create user
 router.put('/:id', (req, res, next) => {
     res.send({user: req.body.id})
 })
@@ -59,11 +71,11 @@ router.get('/:id/friends', (req, res, next) => {
 })
 
 // Create friend
-router.post('/:id/friends', (req, res, next) => {
+router.post('/:id/friends', function createFriend(req, res, next) {
     res.send({user: req.body.id, friend: 0})
 })
 
-// Update friend
+// Update or create friend
 router.put('/:id/friends', (req, res, next) => {
     res.send({user: req.body.id, friend: 0})
 })

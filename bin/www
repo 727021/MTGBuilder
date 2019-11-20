@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('mtgbuilder:server');
 var http = require('http');
+var db = require('../db')
 
 /**
  * Get port from environment and store in Express.
@@ -87,4 +88,12 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+process.on('SIGINT', shutDown)
+process.on('SIGTERM', shutDown)
+// End our postgres pool when the server closes
+function shutDown() {
+  console.log('Shutting down...')
+  db.end(() => server.close(() => process.exit(0)))
 }

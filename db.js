@@ -8,7 +8,18 @@ const pool = new Pool(process.env.DATABASE_URL ? {connectionString: process.env.
 })
 
 module.exports = {
-  query: (text, params, callback) => {
-    return pool.query(text, params, callback)
+  /**
+   * @param {string} queryText
+   * @param {any} values
+   * @param {(err: Error, result: QueryResult<any>) => void} callback
+   */
+  query: (queryText, values, callback) => {
+    return pool.query(queryText, values, callback)
+  },
+  /**
+   * @param {() => void} callback
+   */
+  end: (callback) => {
+    return pool.end(callback)
   }
 }
