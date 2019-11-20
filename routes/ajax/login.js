@@ -16,6 +16,9 @@ router.get('/login', (req, res, next) => {
                         name: result.rows[0].username,
                         type: result.rows[0].type
                     }
+                    db.query('UPDATE account SET last_login = CURRENT_TIMESTAMP WHERE account_id = $1', [req.session.user.id], (err, result) => {
+                        if (err) console.error(err)
+                    })
                     return res.send({user: req.session.user, error: null})
                 } else {
                     return res.send({user: null, error: 'Invalid login'})

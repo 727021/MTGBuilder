@@ -1,16 +1,21 @@
 $(() => {
-    $('#btnLogin').click(() => {
+    $('#loginForm').submit((e) => {
+        e.preventDefault()
         $('#invalidLogin').slideUp()
         let user = $('#username').val().trim()
         let pass = $('#password').val().trim()
 
         if (user == '' || pass == '') {
-            return $('#invalidLogin').slideDown()
+            $('#password').val('')
+            return $('#invalidLogin').slideDown() && false
         }
         $.get('/ajax/login', {user: user, password: pass}, (data) => {
-            console.log(data)
-            if (data.error) return $('#invalidLogin').slideDown()
+            if (data.error) {
+                $('#password').val('')
+                return $('#invalidLogin').slideDown() && false
+            }
             document.location.replace('/')
         })
+        return false
     })
 })
