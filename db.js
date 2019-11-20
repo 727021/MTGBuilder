@@ -21,5 +21,9 @@ module.exports = {
    */
   end: (callback) => {
     return pool.end(callback)
-  }
+  },
+  /**
+   * @returns {Pool}
+   */
+  getPool: () => { return pool }
 }

@@ -18,6 +18,7 @@
   "homepage": "https://mtgbuilder.herokuapp.com/",
   "dependencies": {
     "bcrypt": "^3.0.7",
+    "connect-pg-simple": "^6.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",

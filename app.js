@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session')
+var pgSession = require('connect-pg-simple')(session)
+var db = require('./db')
 require('dotenv').config()
 
 var indexRouter = require('./routes/index');
@@ -30,10 +32,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var sess = {
-  secret: 'keyboard cat',
-  cookie: {},
+  secret: process.env.SESS_SECRET,
+  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 /* 30 days */ },
   resave: false,
-  saveUninitialized: true
+  saveUninitialized: true,
+  store: new pgSession({
+    pool: db.getPool()
+  })
 }
 if (app.get('env') === 'production') {
   app.set('trust proxy', 1) // trust first proxy
