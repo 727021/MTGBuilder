@@ -9,3 +9,7 @@ table * {
     -webkit-user-select: none;
     -moz-user-select: none;
 }
+
+img.card {
+    border-radius: 10px;
+}
