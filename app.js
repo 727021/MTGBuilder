@@ -8,6 +8,7 @@ var pgSession = require('connect-pg-simple')(session)
 var db = require('./db')
 require('dotenv').config()
 
+// Require route packages
 var indexRouter = require('./routes/index');
 var cardRouter = require('./routes/card')
 var deckRouter = require('./routes/deck')
@@ -15,7 +16,6 @@ var userRouter = require('./routes/user')
 var loginRouter = require('./routes/login')
 var registerRouter = require('./routes/register')
 var authEndpoint = require('./routes/ajax/auth')
-var cardEndpoint = require('./routes/ajax/card')
 var deckEndpoint = require('./routes/ajax/deck')
 var userEndpoint = require('./routes/ajax/user')
 
@@ -46,6 +46,7 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess))
 
+// Set up routes
 app.use('/', indexRouter);
 app.use('/card', cardRouter)
 app.use('/deck', deckRouter)
@@ -53,7 +54,6 @@ app.use('/user', userRouter)
 app.use('/login', loginRouter)
 app.use('/register', registerRouter)
 app.use('/ajax/', authEndpoint)
-app.use('/ajax/card', cardEndpoint)
 app.use('/ajax/deck', deckEndpoint)
 app.use('/ajax/user', userEndpoint)
 

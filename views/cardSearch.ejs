@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div class="container my-2 bg-dark">
+    <div class="row">
+        <div class="col">
+            <form id="searchForm" action="/card"></form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th colspan="2"></th>
+                        <th>Name</th>
+                        <th>Type<span class="text-muted">(s)</span></th>
+                        <th>Cost</th>
+                        <th><span title="Power">P</span>/<span title="Toughness">T</span></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6" class="align-middle">
+                            <div class="row">
+                                <div class="col text-muted" id="note">
+                                    <sup><sup>&dagger;</sup></sup>Planeswalker loyalty
+                                    <br>
+                                    <sup>&Dagger;</sup>Split/flip/dual card
+                                </div>
+                                <div class="col text-center">
+                                    <button class="btn btn-outline-primary" id="btnLoadMore" style="display: none;">Load More</button>
+                                    <div class="spinner-border text-primary" role="status" id="spnLoading"></div>
+                                </div>
+                                <div class="col"></div>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    </div>
+    <span class="d-none" id="query" data-search="<%= locals.query %>"></span>
+    <%include partials/scripts %>
+  </body>
+</html>

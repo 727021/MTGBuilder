@@ -1,0 +1,11 @@
+span.searchName:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+table * {
+    user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
