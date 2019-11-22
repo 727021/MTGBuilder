@@ -76,7 +76,7 @@ $(() => {
                                 </div>
                                 <div class="row${flavor ? ' border-bottom pb-1' : ''}">
                                     <div class="col">
-                                        ${text.replace(/{(\d)}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/{[wbrgu]}/gi,(match) => {return match.toLowerCase()}).replace(/{([wbrgu])}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/[\r\n]/g, '<br>').replace(/{T}/g, '<i class="ms ms-cost ms-tap"></i>')}
+                                        ${text.replace(/{(\d)}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/{[wbrgu]}/gi,(match) => {return match.toLowerCase()}).replace(/{([wbrgu])}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/[\r\n]/g, '<br>').replace(/{T}/g, '<i class="ms ms-cost ms-tap"></i>').replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>').replace(/\[\+(\d)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>').replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')}
                                     </div>
                                 </div>
                                 ${flavor ? `<div class="row"><div class="col"><i>${flavor}</i></div></div>` : ''}
