@@ -10,6 +10,10 @@ $(() => {
         })
     })
 
+    $('#navbarSearchCards').click(() => {
+        document.location.replace(`/card?name=${$('#navbarSearch').val()}`)
+    })
+
     $('[data-toggle="tooltip"]').tooltip()
 
     $('.toast').toast()
