@@ -1,3 +1,3 @@
 @echo off
 cls
-set DEBUG=mtgbuilder:* & npm start
+set DEBUG=mtgbuilder:* & nodemon

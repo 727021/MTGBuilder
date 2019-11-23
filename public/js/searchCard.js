@@ -46,7 +46,7 @@ $(() => {
                         let img = $(this).attr('data-img')
                         let name = $(this).text()
                         let cost = $(this).attr('data-cost')
-                        let text = $(this).attr('data-text')
+                        let text = $(this).attr('data-text').replace(/{(\d)}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/{[wbrgu]}/gi,(match) => {return match.toLowerCase()}).replace(/{([wbrgu])}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/[\r\n]/g, '<br>').replace(/{T}/g, '<i class="ms ms-cost ms-tap"></i>').replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>').replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>').replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')
                         let set = $(this).attr('data-set').split('|')
                         let rarity = $(this).attr('data-rarity')
                         let type = $(this).attr('data-type')
@@ -76,7 +76,7 @@ $(() => {
                                 </div>
                                 <div class="row${flavor ? ' border-bottom pb-1' : ''}">
                                     <div class="col">
-                                        ${text.replace(/{(\d)}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/{[wbrgu]}/gi,(match) => {return match.toLowerCase()}).replace(/{([wbrgu])}/g, '<i class="ms ms-cost ms-$1"></i>').replace(/[\r\n]/g, '<br>').replace(/{T}/g, '<i class="ms ms-cost ms-tap"></i>').replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>').replace(/\[\+(\d)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>').replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')}
+                                        ${text}
                                     </div>
                                 </div>
                                 ${flavor ? `<div class="row"><div class="col"><i>${flavor}</i></div></div>` : ''}
