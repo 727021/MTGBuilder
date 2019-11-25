@@ -10,8 +10,14 @@ $(() => {
         })
     })
 
+    $('#navbarSearchForm').submit((e) => {
+        e.preventDefault()
+        return false
+    })
+
     $('#navbarSearchCards').click(() => {
-        document.location.replace(`/card?name=${$('#navbarSearch').val()}`)
+        let name = $('#navbarSearch').val()
+        document.location.replace(`/card${name.trim() === '' ? '' : `?name=${name}`}`)
     })
 
     $('[data-toggle="tooltip"]').tooltip()

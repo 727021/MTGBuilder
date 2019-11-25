@@ -182,4 +182,11 @@ $(() => {
 
         return false
     })
+
+    $('#searchForm button[type="reset"]').click((e) => {
+        e.preventDefault()
+        document.getElementById('searchForm').reset()
+        $('#cardName').val('')
+        return false
+    })
 })
