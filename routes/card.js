@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
   }
   let name = req.session.query.name
   req.session.query.name = ''
-  res.render('cardSearch', { title: 'Card Search - MTGBuilder', extra: 'Card Search', scripts: ['/js/searchCard.js'], styles: ['/css/search.css'], query: name })
+  res.render('cardSearch', { title: 'Card Search - MTGBuilder', extra: 'Card Search', scripts: ['/js/searchCard.js','/js/top.js'], styles: ['/css/search.css','/css/top.css'], query: name, user: (req.session.user || false) })
 });
 
 module.exports = router;

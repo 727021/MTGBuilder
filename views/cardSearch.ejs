@@ -16,7 +16,6 @@
                     </div>
                 <div class="modal-body">
                     <div class="container-fluid" id="cardModalContent">
-                        Add rows here
                     </div>
                 </div>
                 <div class="modal-footer"></div>
@@ -28,7 +27,43 @@
     <div class="container my-2 bg-dark">
     <div class="row">
         <div class="col">
-            <form id="searchForm" action="/card"></form>
+            <form id="searchForm" action="/card">
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="cardName" id="cardName" placeholder="Name" value="<%= query %>">
+                        <select class="form-control" name="cardType" id="cardType">
+                            <option selected value="-1">-- Type --</option>
+                            <option value="0">Artifact</option>
+                            <option value="1">Conspiracy</option>
+                            <option value="2">Creature</option>
+                            <option value="3">Enchantment</option>
+                            <option value="4">Hero</option>
+                            <option value="5">Instant</option>
+                            <option value="6">Land</option>
+                            <option value="7">Phenomenon</option>
+                            <option value="8">Plane</option>
+                            <option value="9">Planeswalker</option>
+                            <option value="10">Scheme</option>
+                            <option value="11">Sorcery</option>
+                            <option value="12">Summon</option>
+                            <option value="13">Tribal</option>
+                            <option value="14">Vanguard</option>
+                        </select>
+                        <select name="cardSet" id="cardSet" class="form-control">
+                            <option selected value="-1">-- Set --</option>
+                        </select>
+                        <select name="cardRarity" id="cardRarity" class="form-control">
+                            <option value="-1">-- Rarity --</option>
+                            <option value="0">Common</option>
+                            <option value="1">Uncommon</option>
+                            <option value="2">Rare</option>
+                            <option value="3">Mythic Rare</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Search Cards</button>
+                        <button type="reset" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Clear Search"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
     <div class="row">
@@ -55,8 +90,7 @@
                                     <sup>&Dagger;</sup>Split/flip/dual card
                                 </div>
                                 <div class="col text-center">
-                                    <button class="btn btn-outline-primary" id="btnLoadMore" style="display: none;">Load More</button>
-                                    <div class="spinner-border text-primary" role="status" id="spnLoading"></div>
+                                    <button class="btn btn-primary" id="btnLoadMore">Load More</button>
                                 </div>
                                 <div class="col"></div>
                             </div>
@@ -68,6 +102,7 @@
     </div>
     </div>
     <span class="d-none" id="query" data-search="<%= locals.query %>"></span>
+    <%include partials/top %>
     <%include partials/scripts %>
   </body>
 </html>
