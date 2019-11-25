@@ -52,6 +52,7 @@ $(() => {
         return text
             .replace(/"/g, '&quot;')// " to &quot;
             .replace(/\\/g, '')// Remove backslashes
+            .replace(/{CHAOS}/g, '<i class="ms ms-chaos"></i>')// Chaos symbol
             .replace(/{(\d)}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Colorless numbered mana
             .replace(/{[\dhwbrgucpsxyz]+(?:\/[wbrgucps])?}/gi,(match) => {return match.toLowerCase()})
             .replace(/{([wbrgucpsxyz])}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Normal mana
@@ -59,6 +60,7 @@ $(() => {
             .replace(/{(\d|[wbrgucps])\/([wbrgucps])}/g, '<i class="ms ms-cost ms-shadow ms-$1$2"></i>')// Hybrid mana
             .replace(/[\r\n]/g, '<br>')// \n and \r to <br>
             .replace(/{T}/g, '<i class="ms ms-cost ms-shadow ms-tap"></i>')// Tap symbol
+            .replace(/{Q}/g, '<i class="ms ms-cost ms-shadow ms-untap"></i>')// Untap symbol
             .replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>')// Zero loyalty
             .replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>')// Up loyalty
             .replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')// Down loyalty
@@ -129,7 +131,7 @@ $(() => {
                                         ${type}
                                     </div>
                                     <div class="col text-right">
-                                        <i class="ss ss-grad ss-${set[0]} ss-${rarity}"></i>
+                                        <i class="ss ss-2x ss-grad ss-${set[0]} ss-${rarity}"></i>
                                     </div>
                                 </div>
                                 <div class="row${flavor ? ' border-bottom pb-1' : ''}">
