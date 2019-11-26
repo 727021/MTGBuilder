@@ -24,3 +24,60 @@ $(() => {
 
     $('.toast').toast()
 })
+
+function htmlQuotes(text) {
+    return text.replace(/["\u0022\u201C\u201D]/g, '&quot;')
+}
+
+/**
+ * Parse card symbols
+ * @param {string} text
+ * @returns {text} A string with card symbols parsed into HTML
+ */
+function parseSymbols(text) {
+    /**
+     * Card Symbols:
+     * n = any integer >= 0
+     * c = any mana color
+     *
+     * {Hc} Half
+     * {W} White
+     * {B} Black
+     * {R} Red
+     * {G} Green
+     * {U} Blue
+     * {C} Colorless
+     * {P} Phyrexian
+     * {S} Snow
+     * {X} X
+     * {Y} Y
+     * {Z} Z
+     * {n} n Numbered Colorless
+     *
+     * {n/c} or {c/c} Hybrid
+     *
+     * {T} Tap
+     * {Q} Untap
+     *
+     * {CHAOS} Chaos
+     *
+     * [0] Zero Loyalty
+     * [+n] n Up Loyalty
+     * [-n] n Down Loyalty
+     */
+    return text
+        .replace(/["\u0022\u201C\u201D]/g, '&quot;')// " to &quot;
+        .replace(/\\/g, '')// Remove backslashes
+        .replace(/{CHAOS}/g, '<i class="ms ms-chaos"></i>')// Chaos symbol
+        .replace(/{(\d)}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Colorless numbered mana
+        .replace(/{[\dhwbrgucpsxyz]+(?:\/[wbrgucps])?}/gi,(match) => {return match.toLowerCase()})
+        .replace(/{([wbrgucpsxyz])}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Normal mana
+        .replace(/{h([wbrgucpsxyz])}/g, '<i class="ms ms-cost ms-half ms-shadow ms-$1"></i>')// Half mana
+        .replace(/{(\d|[wbrgucps])\/([wbrgucps])}/g, '<i class="ms ms-cost ms-shadow ms-$1$2"></i>')// Hybrid mana
+        .replace(/[\r\n]/g, '<br>')// \n and \r to <br>
+        .replace(/{T}/g, '<i class="ms ms-cost ms-shadow ms-tap"></i>')// Tap symbol
+        .replace(/{Q}/g, '<i class="ms ms-cost ms-shadow ms-untap"></i>')// Untap symbol
+        .replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>')// Zero loyalty
+        .replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>')// Up loyalty
+        .replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')// Down loyalty
+}

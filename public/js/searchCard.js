@@ -16,56 +16,6 @@ $(() => {
         }
     }
 
-    /**
-     * Parse card symbols
-     * @param {string} text
-     * @returns {text} A string with card symbols parsed into HTML
-     */
-    function parseSymbols(text) {
-        /**
-         * Card Symbols:
-         * n = any integer >= 0
-         * c = any mana color
-         *
-         * {Hc} Half
-         * {W} White
-         * {B} Black
-         * {R} Red
-         * {G} Green
-         * {U} Blue
-         * {C} Colorless
-         * {P} Phyrexian
-         * {S} Snow
-         * {X} X
-         * {Y} Y
-         * {Z} Z
-         * {n} n Numbered Colorless
-         *
-         * {n/c} or {c/c} Hybrid
-         *
-         * {T} Tap
-         *
-         * [0] Zero Loyalty
-         * [+n] n Up Loyalty
-         * [-n] n Down Loyalty
-         */
-        return text
-            .replace(/"/g, '&quot;')// " to &quot;
-            .replace(/\\/g, '')// Remove backslashes
-            .replace(/{CHAOS}/g, '<i class="ms ms-chaos"></i>')// Chaos symbol
-            .replace(/{(\d)}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Colorless numbered mana
-            .replace(/{[\dhwbrgucpsxyz]+(?:\/[wbrgucps])?}/gi,(match) => {return match.toLowerCase()})
-            .replace(/{([wbrgucpsxyz])}/g, '<i class="ms ms-cost ms-shadow ms-$1"></i>')// Normal mana
-            .replace(/{h([wbrgucpsxyz])}/g, '<i class="ms ms-cost ms-half ms-shadow ms-$1"></i>')// Half mana
-            .replace(/{(\d|[wbrgucps])\/([wbrgucps])}/g, '<i class="ms ms-cost ms-shadow ms-$1$2"></i>')// Hybrid mana
-            .replace(/[\r\n]/g, '<br>')// \n and \r to <br>
-            .replace(/{T}/g, '<i class="ms ms-cost ms-shadow ms-tap"></i>')// Tap symbol
-            .replace(/{Q}/g, '<i class="ms ms-cost ms-shadow ms-untap"></i>')// Untap symbol
-            .replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>')// Zero loyalty
-            .replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>')// Up loyalty
-            .replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')// Down loyalty
-    }
-
     async function loadPage() {
         loading(false)
         let url = q + `&page=${page++}`
@@ -80,14 +30,15 @@ $(() => {
             success: function(data, status, jqXHR) {
                 // Put the cards on the page
                 data.cards.forEach(card => {
+                    console.log(card)
                     let names = (card.names && card.names.length > 0) ? card.names : null
                     if (names) names.splice(names.indexOf(card.name), 1)
                     let cost = (card.manaCost || '').toLowerCase()
                     $('#tbody').append(`
                     <tr>
                         <td class="align-middle"><span class="text-muted">${++cardCount}</span></td>
-                        <td class="align-middle"><i data-toggle="tooltip" data-placement="top" title="${card.setName}" class="ss ss-grad ss-2x ss-${card.set.toLowerCase()} ss-${card.rarity.toLowerCase()}"></i></td>
-                        <td class="align-middle"><span data-flavor="${card.flavor || ''}" data-rarity="${card.rarity.toLowerCase()}" data-set="${card.set.toLowerCase()}|${card.setName}" data-cost='${cost}' data-pt="${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty || ''}" data-text="${card.text}" data-type="${card.type}" data-img="${card.imageUrl || ''}" class="searchName">${card.name}</span>${(names) ? '/' + names.join('/') + '<sup><a href="#note" class="text-reset text-decoration-none">&Dagger;</a></sup>' : ''}</td>
+                        <td class="align-middle"><i data-toggle="tooltip" data-placement="top" title="${card.setName}" class="ss ss-grad ss-2x ss-${card.set.toLowerCase() == 'tsb' ? 'tsp ss-timeshifted' : card.set.toLowerCase()} ss-${card.rarity.toLowerCase()}"></i></td>
+                        <td class="align-middle"><span data-flavor="${htmlQuotes(card.flavor || '')}" data-rarity="${card.rarity.toLowerCase()}" data-set="${card.set.toLowerCase() == 'tsb' ? 'tsp ss-timeshifted' : card.set.toLowerCase()}|${card.setName}" data-cost="${cost}" data-pt="${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty || ''}" data-text="${htmlQuotes(card.text || '')}" data-type="${card.type}" data-img="${card.imageUrl || ''}" class="searchName">${card.name}</span>${(names) ? '/' + names.join('/') + '<sup><a href="#note" class="text-reset text-decoration-none">&Dagger;</a></sup>' : ''}</td>
                         <td class="align-middle">${card.types.join(', ')}</td>
                         <td class="align-middle">${parseSymbols(cost)}</td>
                         <td class="align-middle">${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty ? `${card.loyalty}<sup><sup><a href="#note" class="text-reset text-decoration-none">&dagger;</a></sup></sup>` : ''}</td>
