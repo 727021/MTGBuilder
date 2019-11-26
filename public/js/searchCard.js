@@ -41,7 +41,7 @@ $(() => {
                         <td class="align-middle"><span data-flavor="${htmlQuotes(card.flavor || '')}" data-rarity="${card.rarity.toLowerCase()}" data-set="${card.set.toLowerCase() == 'tsb' ? 'tsp ss-timeshifted' : card.set.toLowerCase()}|${card.setName}" data-cost="${cost}" data-pt="${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty || ''}" data-text="${htmlQuotes(card.text || '')}" data-type="${card.type}" data-img="${card.imageUrl || ''}" class="searchName">${card.name}</span>${(names) ? '/' + names.join('/') + '<sup><a href="#note" class="text-reset text-decoration-none">&Dagger;</a></sup>' : ''}</td>
                         <td class="align-middle">${card.types.join(', ')}</td>
                         <td class="align-middle">${parseSymbols(cost)}</td>
-                        <td class="align-middle">${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty ? `${card.loyalty}<sup><sup><a href="#note" class="text-reset text-decoration-none">&dagger;</a></sup></sup>` : ''}</td>
+                        <td class="align-middle">${(card.power && card.toughness) ? `${card.power}/${card.toughness}` : card.loyalty ? `<i class="ms ms-shadow ms-loyalty-start ms-loyalty-${card.loyalty}"></i><sup><sup><a href="#note" class="text-reset text-decoration-none">&dagger;</a></sup></sup>` : ''}</td>
                     </tr>
                     `)
                 })

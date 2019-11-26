@@ -37,7 +37,7 @@ function htmlQuotes(text) {
 function parseSymbols(text) {
     /**
      * Card Symbols:
-     * n = any integer >= 0
+     * n = any integer 0 <= n <= 20
      * c = any mana color
      *
      * {Hc} Half
@@ -80,4 +80,5 @@ function parseSymbols(text) {
         .replace(/\[0\]/g, '<i class="ms ms-loyalty-zero ms-loyalty-0"></i>')// Zero loyalty
         .replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>')// Up loyalty
         .replace(/\[−(\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')// Down loyalty
+        .replace(/(\(.+\))/g, '<i>$1</i>')// Italicize help text
 }
