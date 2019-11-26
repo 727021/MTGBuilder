@@ -13,3 +13,26 @@ table * {
 img.card {
     border-radius: 10px;
 }
+
+/* Special case loyalties */
+.ms-loyalty-1d4-1:after,
+.ms-loyalty-25:after {
+    color: #fff;
+    display: inline-block;
+    font-size: 0.5em;
+    font-family: MPlantin, Garamond, Palatino, 'Times New Roman', Times, serif;
+    position: absolute;
+    left: 0;
+    line-height: 1.75em;
+    width: 100%;
+    text-align: center;
+    -webkit-padding-before: 0.15em;
+}
+/* Dungeon Master */
+.ms-loyalty-start.ms-loyalty-1d4-1:after {
+    content: "1d4+1";
+}
+/* Garruk the Slayer */
+.ms-loyalty-down.ms-loyalty-25:after {
+    content: "-25";
+}
