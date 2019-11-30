@@ -8,14 +8,14 @@ var bcrypt = require('bcrypt')
 router.get('/', (req, res, next) => {
     let name = validator.trim(validator.escape(req.query.name || ''))
     let type = validator.trim(validator.escape((req.query.type || '').toLowerCase()))
-    let query = "SELECT i.id, username, i.status, i.type, to_char(a.last_login, 'HH:MI PM on DD Mon YYYY') AS last_login FROM account_info i, account a WHERE i.id = a.account_id"
+    let query = "SELECT i.id, i.username, i.status, i.type, to_char(a.last_login, 'HH:MI PM on DD Mon YYYY') AS last_login FROM account_info i, account a WHERE i.id = a.account_id"
     if (name != '') {
         query += ` AND username LIKE '%${name}%'`
     }
     if (type != '') {
         query += ` AND type = '${type}'`
     }
-    query += ' ORDER BY last_login DESC'
+    query += ' ORDER BY a.last_login DESC'
 
     db.query(query, [], (err, result) => {
         if (err)  {
