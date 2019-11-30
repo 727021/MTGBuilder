@@ -20,18 +20,28 @@ $(() => {
         document.location.replace(`/card${name.trim() === '' ? '' : `?name=${name}`}`)
     })
 
+    $('#navbarSearchUsers').click(() => {
+        let name = $('#navbarSearch').val()
+        document.location.replace(`/user${name.trim() === '' ? '' : `?name=${name}`}`)
+    })
+
     $('[data-toggle="tooltip"]').tooltip()
 
     $('.toast').toast()
 })
 
+/**
+ * Replace quotes with an html quote symbol
+ * @param {string} text
+ * @returns {string}
+ */
 function htmlQuotes(text) {
     return text.replace(/["\u0022\u201C\u201D]/g, '&quot;')
 }
 
 /**
  * Parse card symbols
- * @param {string} text
+ * @param {string} text The string to parse
  * @returns {text} A string with card symbols parsed into HTML
  */
 function parseSymbols(text) {

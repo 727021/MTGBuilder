@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div class="container my-2 bg-dark">
+    <div class="row">
+        <div class="col">
+            <form id="searchForm" action="/user">
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="userName" id="userName" placeholder="Username" value="<%= query %>">
+                        <select name="userType" id="userType">
+                            <option value="">-- User Type --</option>
+                            <% locals.userTypes.forEach(type => { %>
+                            <option value="<%= type.toLowerCase() %>"><%= type %></option>
+                            <% }) %>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Search Users</button>
+                        <button type="reset" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Clear Search"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Username</th>
+                        <th>Status</th>
+                        <th>Last Seen</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <%include partials/top %>
+    <%include partials/scripts %>
+  </body>
+</html>

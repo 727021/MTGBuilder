@@ -100,7 +100,6 @@ $(() => {
             }
         })
     }
-    loadPage()
 
     var cardTypes = ['artifact','conspiracy','creature','enchantment','hero','instant','land','phenomenon','plane','planeswalker','scheme','sorcery','summon','tribal','vanguard']
     var cardSets = []
@@ -142,4 +141,7 @@ $(() => {
         $('#cardName').val('')
         return false
     })
+
+    // Load the first page of results
+    loadPage()
 })

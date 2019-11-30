@@ -6,7 +6,24 @@ var bcrypt = require('bcrypt')
 
 // Search users
 router.get('/', (req, res, next) => {
-    res.send({users: []})
+    let name = validator.trim(validator.escape(req.query.name || ''))
+    let type = validator.trim(validator.escape((req.query.type || '').toLowerCase()))
+    let query = 'SELECT id, username, status, type, last_login FROM account_info'
+    if (name != '') {
+        query += ` WHERE username LIKE '%${name}%'`
+    }
+    if (type != '') {
+        query += `${name != '' ? ' AND' : ' WHERE'} type = '${type}'`
+    }
+    query += ' ORDER BY last_login DESC'
+
+    db.query(query, [], (err, result) => {
+        if (err)  {
+            console.log(err)
+            return res.send({users: null, error: 'Database error'})
+        }
+        res.send({users: result.rows, error: null})
+    })
 })
 
 // User details
