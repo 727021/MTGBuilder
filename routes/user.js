@@ -20,6 +20,16 @@ router.get('/', function(req, res, next) {
   })
 });
 
+// Edit profile
+router.get('/edit', function(req, res, next) {
+  res.render('index', { title: 'MTGBuilder', extra: 'Edit Profile' });
+});
+
+// User friend list
+router.get('/friends', function(req, res, next) {
+  res.render('index', { title: 'MTGBuilder', extra: 'Friends' });
+});
+
 // User profile
 router.get('/:id', function(req, res, next) {
   let id = Number(validator.escape(req.params.id)) || 0
@@ -50,19 +60,9 @@ router.get('/:id', function(req, res, next) {
   })
 });
 
-// User friend list
-router.get('/friends', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder' });
-});
-
 // User decks
 router.get('/:id/decks', function(req, res, next) {
     res.render('index', { title: 'MTGBuilder' });
-});
-
-// Edit profile
-router.get('/edit', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder' });
 });
 
 module.exports = router;

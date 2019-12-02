@@ -6,9 +6,28 @@
   </head>
   <body>
     <%include partials/navbar %>
-    <div class="container mt-2 bg-dark">
-      <h1>Your Profile</h1>
-      <p>Coming soon!</p>
+    <div class="container mt-2 pt-2 bg-dark">
+      <div class="row">
+        <div class="col-9">
+          <h3><%= profile.username %> <small class="text-muted text-truncate"><%= profile.status %></small></h3>
+        </div>
+        <div class="col-3">
+          <div class="btn-group" role="group">
+            <a href="/user/friends" class="btn btn-primary" role="button">Friends (<%= profile.friendsCount %>)</a>
+            <a href="/user/edit" class="btn btn-outline-primary" role="button" data-toggle="tooltip" data-placement="right" title="Edit Profile"><i class="fas fa-user-cog"></i></a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Main content (decks) -->
+        <div class="col-12 col-md-9">Recent Decks (Coming Soon)</div>
+        <!-- Sidebar -->
+        <div class="col-12 col-md-3">
+          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') %></span>
+          <br>
+          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') %></span>
+        </div>
+      </div>
     </div>
 
     <%include partials/scripts %>
