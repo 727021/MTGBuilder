@@ -14,12 +14,12 @@ $(() => {
     function loadUsers() {
         loading()
         $('#tbody').empty()
+        $('#tfoot').empty()
         let name = $('#userName').val()
         let type = $('#userType').val()
         let url = `/ajax/user?name=${name}&type=${type}`
         $.get(url, (data) => {
-            if (data.error) $('#tbody').html(`<tr><td colspan="5" class="align-middle text-center">${data.error}</td></tr>`)
-            else if (data.users.length == 0) $('#tbody').html('<tr><td colspan="5" class="align-middle text-center">No users found.</td></tr>')
+            if (data.error) $('#tfoot').html(`<tr><td colspan="5" class="align-middle text-center">${data.error}</td></tr>`)
             else {
                 data.users.forEach(user => {
                     $('#tbody').append(`

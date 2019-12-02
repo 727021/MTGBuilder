@@ -1,0 +1,26 @@
+$(() => {
+    $('button#removeFriend').click(function removeFriend() {
+        $btn = $(this)
+        $btn.attr('id', 'addFriend')
+        $btn.unbind()
+        $btn.click(addFriend)
+        $btn.html('<i class="fas fa-user-plus"></i>')
+        $btn.attr('title', 'Add Friend')
+        $btn.tooltip('dispose')
+        $btn.tooltip()
+        $('#friendToastContent').html('Friend removed')
+        $('#friendToast').toast('show')
+    })
+
+    $('button#addFriend').click(function addFriend() {
+        $btn = $(this)
+        $btn.removeAttr('id')
+        $btn.unbind()
+        $btn.html('<i class="fas fa-user-check"></i>')
+        $btn.attr('title', 'Friend Requested')
+        $btn.tooltip('dispose')
+        $btn.tooltip()
+        $('#friendToastContent').html('Friend request sent')
+        $('#friendToast').toast('show')
+    })
+})

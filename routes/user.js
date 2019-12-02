@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var validator = require('validator')
 var db = require('../db')
 
 // User search
@@ -21,7 +22,32 @@ router.get('/', function(req, res, next) {
 
 // User profile
 router.get('/:id', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder' });
+  let id = Number(validator.escape(req.params.id)) || 0
+  db.query('SELECT * FROM account_info WHERE id = $1', [id], (err, result) => {
+    if (err || result.rowCount === 0) {
+      if (err) console.log(err)
+      return res.redirect('/user')
+    }
+    let profile = result.rows[0]
+    db.query('SELECT COUNT(id_to) FROM friend_list WHERE id_from = $1', [id], (err, result) => {
+      if (err || result.rowCount === 0) {
+        if (err) console.log(err)
+        return res.redirect('/user')
+      }
+      profile.friendsCount = result.rows[0].count
+      if (req.session.user && id == req.session.user.id) res.render('ownProfile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/ownProfile.js'], user: (req.session.user || false), profile: profile})
+      else {
+        db.query('SELECT status FROM friend_list WHERE id_from = $1 AND id_to = $2 OR id_from = $2 AND id_to = $1', [id, (req.session.user || {id:0}).id], (err, result) => {
+          if (err) {
+            console.log(err)
+            return res.redirect('/user')
+          }
+          profile.friendStatus = result.rowCount == 0 ? 'none' : result.rows[0].status
+          res.render('profile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/profile.js'], user: (req.session.user || false), profile: profile})
+        })
+      }
+    })
+  })
 });
 
 // User friend list

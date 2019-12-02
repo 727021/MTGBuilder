@@ -22,6 +22,7 @@ router.get('/', (req, res, next) => {
             console.log(err)
             return res.send({users: null, error: 'Database error'})
         }
+        if (result.rowCount === 0) return res.send({users: null, error: 'No users found'})
         res.send({users: result.rows, error: null})
     })
 })
@@ -38,7 +39,7 @@ router.get('/:id', (req, res, next) => {
             console.log(err)
             return res.send({user: null, error: 'Database error'})
         }
-        if (result.rowCount == 0) res.send({user: null, error: 'No user found'})
+        if (result.rowCount == 0) return res.send({user: null, error: 'No user found'})
         res.send(result.rows[0])
     })
 })
@@ -79,12 +80,65 @@ router.post('/', function createUser(req, res, next) {
 
 // Update or create user
 router.put('/:id', (req, res, next) => {
-    res.send({user: req.body.id})
+    if (!(req.session.user && (req.session.user.id == req.params.id || req.session.user.type == 'admin')))
+        return res.status(403).send({user: null, error: 'User not logged in'})
+    if (!req.query || !(req.query.username || req.query.password || req.query.email)) {
+        db.query('SELECT * FROM account_info WHERE id = $1', [req.params.id], (err, result) => {
+            if (err) {
+                console.error(err)
+                return res.send({user: null, error: 'Database error'})
+            }
+            return res.send({user: result.rows[0], error: null})
+        })
+    } else {
+        let username = validator.trim(validator.escape(req.query.username || ''))
+        let password = validator.trim(validator.escape(req.query.password || ''))
+        let email = validator.trim(validator.escape(req.query.email || ''))
+        if (username != '' && !validator.matches(username, /^[A-Za-z0-9_]+$/)) return res.send({user: null, error: 'Username must contain only letters, numbers, and underscore'})
+        if (username != '' && !validator.matches(username, /[A-Za-z0-9]+/)) return res.send({user: null, error: 'Username must contain at least one letter or number'})
+        if (email != '' && !validator.isEmail(email)) return res.send({user: null, error: 'Invalid email'})
+        if (password != '' && password.length < 8) return res.send({user: null, error: 'Password must be at least 8 characters long'})
+        query = []
+        params = []
+        if (username != '') {
+            params.push(username)
+            query.push(`username = $${params.length}`)
+        }
+        if (password != '') {
+            params.push(bcrypt.hashSync(password, 10))
+            query.push(`password = $${params.length}`)
+        }
+        if (email != '') {
+            params.push(email)
+            query.push(`email = $${params.length}`)
+        }
+        params.push(req.params.id)
+        db.query(`UPDATE account SET ${query.join(', ')} WHERE id = $${params.length} RETURNING account_id`, params, (err, result) => {
+            if (err) {
+                console.error(err)
+                return res.send({user: null, error: 'Database error'})
+            }
+            db.query('SELECT * FROM account_info WHERE id = $1', [result.rows[0].account_id], (err, result) => {
+                if (err) {
+                    console.error(err)
+                    return res.send({user: null, error: 'Database error'})
+                }
+                res.send({user: result.rows[0], error: null})
+            })
+        })
+    }
+
 })
 
 // Get friends
 router.get('/:id/friends', (req, res, next) => {
-    res.send({user: req.params.id, friends: []})
+    db.query(`SELECT * FROM friend_list WHERE id_from = $1${!(req.session.user && req.session.user.id == req.params.id) ? ' AND status = \'accepted\'' : ''}`, [validator.escape(req.params.id)], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({friends: null, error: 'Database error'})
+        }
+        res.send({friends: result.rows, error: null})
+    })
 })
 
 // Create friend

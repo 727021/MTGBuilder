@@ -1,0 +1,52 @@
+<%# This page is for viewing another user's profile %>
+<!DOCTYPE html>
+<html>
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div id="friendToast" class="toast" style="position: absolute; top: 10px; right: 15px;" data-delay="2000">
+        <div class="toast-header">
+            <strong class="mr-auto">MTGBuilder</strong>
+        </div>
+        <div class="toast-body text-dark" id="friendToastContent">
+        </div>
+    </div>
+    <div class="container mt-2 pt-2 bg-dark">
+      <div class="row">
+        <div class="col-9">
+          <h3><%= profile.username %> <small class="text-muted text-truncate"><%= profile.status %></small></h3>
+        </div>
+        <div class="col-3">
+          <div class="btn-group" role="group">
+            <button class="btn btn-primary">Friends (<%= profile.friendsCount %>)</button>
+            <% if (locals.user) { %>
+              <% if (profile.friendStatus == 'sent') { %>
+                <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="right" title="Friend Requested"><i class="fas fa-user-check"></i></button>
+              <% } else if (profile.friendStatus == 'accepted') { %>
+                <button class="btn btn-outline-primary" id="removeFriend" data-toggle="tooltip" data-placement="right" title="Remove Friend"><i class="fas fa-user-minus"></i></button>
+              <% } else if (profile.friendStatus == 'none') { %>
+                <button class="btn btn-outline-primary" id="addFriend" data-toggle="tooltip" data-placement="right" title="Add Friend"><i class="fas fa-user-plus"></i></button>
+              <% } %>
+            <% } else { %>
+              <a href="/login" class="btn btn-outline-primary" role="button"><i class="fas fa-user-plus"></i></a>
+            <% } %>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <!-- Main content (decks) -->
+        <div class="col-12 col-md-9">Recent Decks (Coming Soon)</div>
+        <!-- Sidebar -->
+        <div class="col-12 col-md-3">
+          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') %></span>
+          <br>
+          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') %></span>
+        </div>
+      </div>
+    </div>
+
+    <%include partials/scripts %>
+  </body>
+</html>
