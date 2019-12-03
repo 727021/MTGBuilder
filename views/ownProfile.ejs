@@ -1,6 +1,6 @@
 <%# This page is for viewing the current user's profile %>
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <%include partials/head %>
   </head>
@@ -23,9 +23,9 @@
         <div class="col-12 col-md-9">Recent Decks (Coming Soon)</div>
         <!-- Sidebar -->
         <div class="col-12 col-md-3">
-          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') %></span>
+          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
           <br>
-          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') %></span>
+          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
         </div>
       </div>
     </div>
