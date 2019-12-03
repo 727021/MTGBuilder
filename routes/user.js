@@ -22,13 +22,13 @@ router.get('/', function(req, res, next) {
 
 // Edit profile
 router.get('/edit', function(req, res, next) {
-  if (!req.session.user) res.redirect('/login')
+  if (!req.session.user) return res.redirect('/login')
   res.render('index', { title: 'MTGBuilder', extra: 'Edit Profile' });
 });
 
 // User followers list
 router.get('/followers', function(req, res, next) {
-  if (!req.session.user) res.redirect('/login')
+  if (!req.session.user) return res.redirect('/login')
   db.query('SELECT a.account_id AS id, a.username AS username, TO_CHAR(f.date_changed, \'DD Mon YYYY\') AS date_changed FROM follower f, account a WHERE f.account_to = $1 AND f.account_from = a.account_id AND f.status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = \'accepted\') ORDER BY f.date_changed DESC', [req.session.user.id], (err, result) => {
     if (err) {
       console.error(1)
