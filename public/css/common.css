@@ -1,0 +1,6 @@
+a.hoverline {
+    text-decoration: none !important;
+}
+a.hoverline:hover {
+    text-decoration: underline !important;
+}

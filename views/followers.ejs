@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div id="followerToast" class="toast" style="position: absolute; top: 10px; right: 15px;" data-delay="2000">
+        <div class="toast-header">
+            <strong class="mr-auto">MTGBuilder</strong>
+        </div>
+        <div class="toast-body text-dark" id="followerToastContent">
+        </div>
+    </div>
+
+    <div class="container mt-2 pt-2 bg-dark">
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-followers-tab" data-toggle="tab" href="#nav-followers" role="tab" aria-controls="nav-followers" aria-selected="true">Followers (<%= followers.length %>)</a>
+                <a class="nav-item nav-link" id="nav-requests-tab" data-toggle="tab" href="#nav-requests" role="tab" aria-controls="nav-requests" aria-selected="false">Requests (<%= requests.length %>)</a>
+                <a class="nav-item nav-link" id="nav-followed-tab" data-toggle="tab" href="#nav-followed" role="tab" aria-controls="nav-followed" aria-selected="false">Followed (<%= followed.length %>)</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-followers" role="tabpanel" aria-labelledby="nav-followers-tab">
+                <!-- Followers -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Date Followed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% followers.forEach(follower => { %>
+                        <tr>
+                            <td class="align-middle"><a class="hoverline text-reset" href="/user/<%= follower.id %>"><%= follower.username %></a></td>
+                            <td class="align-middle"><%= follower.date_changed %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                    <% if (followers.length == 0) { %>
+                    <tfoot><tr><td colspan="2" class="text-center">No followers</td></tr></tfoot>
+                    <% } %>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-requests" role="tabpanel" aria-labelledby="nav-requests-tab">
+                <!-- Requests -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Date Requested</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% requests.forEach(request => { %>
+                        <tr>
+                            <td class="align-middle"><a class="hoverline text-reset" href="/user/<%= request.id %>"><%= request.username %></a></td>
+                            <td class="align-middle"><%= request.date_changed %></td>
+                            <td class="align-middle">
+                                <button data-id="<%= user.id %>" data-follow="<%= request.id %>" class="btn btn-success accept-follow" data-toggle="tooltip" data-placement="bottom" title="Accept"><i class="fas fa-check"></i></button>
+                                <button data-id="<%= user.id %>" data-follow="<%= request.id %>" class="btn btn-danger decline-follow" data-toggle="tooltip" data-placement="bottom" title="Decline"><i class="fas fa-times"></i></button>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                    <% if (requests.length == 0) { %>
+                    <tfoot><tr><td colspan="3" class="text-center">No follow requests</td></tr></tfoot>
+                    <% } %>
+                </table>
+            </div>
+            <div class="tab-pane fade" id="nav-followed" role="tabpanel" aria-labelledby="nav-followed-tab">
+                <!-- Followed -->
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Date Followed</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% followed.forEach(follow => { %>
+                        <tr>
+                            <td class="align-middle"><a class="hoverline text-reset" href="/user/<%= follow.id %>"><%= follow.username %></a></td>
+                            <td class="align-middle"><%= follow.date_changed %></td>
+                            <td class="align-middle">
+                                <% if (follow.status == 'accepted') { %>
+                                    <button data-id="<%= user.id %>" data-follow="<%= follow.id %>" class="btn btn-success unfollow" data-toggle="tooltip" data-placement="bottom" title="Unfollow"><i class="fas fa-user-minus"></i></button>
+                                <% } else if (follow.status == 'sent') { %>
+                                    <button class="btn btn-warning" data-toggle="tooltip" data-placement="bottom" title="Requested"><i class="fas fa-user-check"></i></button>
+                                <% } %>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                    <% if (followed.length == 0) { %>
+                    <tfoot><tr><td colspan="3" class="text-center">No users followed</td></tr></tfoot>
+                    <% } %>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%include partials/scripts %>
+  </body>
+</html>

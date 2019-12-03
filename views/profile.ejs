@@ -20,7 +20,7 @@
         </div>
         <div class="col-3">
           <div class="btn-group" role="group">
-            <button class="btn btn-primary">Friends (<%= profile.followers %>)</button>
+            <button class="btn btn-primary">Followers (<%= profile.followers %>)</button>
             <% if (locals.user) { %>
               <% if (profile.follow == 'sent') { %>
                 <button data-follow="<%= profile.id %>" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="right" title="Follow Requested"><i class="fas fa-user-check"></i></button>
