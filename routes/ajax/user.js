@@ -4,6 +4,80 @@ var db = require('../../db')
 var validator = require('validator')
 var bcrypt = require('bcrypt')
 
+// Get followers
+router.get('/followers', (req, res, next) => {
+    db.query('SELECT a.username AS account_from, cl.cl_type AS status, f.date_changed FROM follower f, account a, common_lookup cl WHERE f.account_to = $1 AND f.account_from = a.account_id AND f.status = cl.common_lookup_id', [Number((req.query || req.session.user || {id: 0}).id) || 0], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({friends: null, error: 'Database error'})
+        }
+        res.send({friends: result.rows, error: null})
+    })
+})
+
+// Create follower
+router.post('/follow', function createFriend(req, res, next) {
+    if (!req.session.user) res.send({follow: null, error: 'User not logged in'})
+    let id = req.session.user.id
+    if (!req.body || !req.body.id) return res.send({follow: null, error: 'Invalid user'})
+    let follow = Number(req.body.id)
+    let status = req.body.status || 'sent'
+    if (status !== 'sent' && status !== 'accepted') status = 'sent'
+    db.query('SELECT f.account_from, f.account_to, cl.cl_type AS status FROM follower f, common_lookup cl WHERE f.account_from = $1 AND f.account_to = $2 AND f.status = cl.common_lookup_id', [id, follow], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({follow: null, error: 'Database error'})
+        }
+        if (result.rowCount > 0) return res.send({follow: result.rows[0], error: null})
+        db.query('INSERT INTO follower (account_from,account_to,status) SELECT a1.account_id, a2.account_id, cl.common_lookup_id FROM account a1, account a2, common_lookup cl WHERE a1.account_id = $1 AND a2.account_id = $2 AND cl.cl_table = \'follower\' AND cl.cl_column = \'status\' AND cl.cl_type = $3', [id,follow,status], (err, result) => {
+            if (err) {
+                console.error(err)
+                return res.send({follow: null, error: 'Database error'})
+            }
+            res.send({follow: {account_from: id, account_to: follow, status: status}, error: null})
+        })
+    })
+})
+
+// Update or create follower
+router.put('/follow', (req, res, next) => {
+    if (!req.session.user) res.send({follow: null, error: 'User not logged in'})
+    let id = req.session.user.id
+    if (!req.body || !req.body.id) return res.send({follow: null, error: 'Invalid user'})
+    let follow = Number(req.body.id)
+    let status = req.body.status || 'sent'
+    if (status !== 'sent' && status !== 'accepted') status = 'sent'
+    db.query('SELECT follower_id FROM follower WHERE account_from = $1 AND account_to = $2', [id,friend], (err, result) => {
+        if (err) {
+            console.error(err)
+            res.send({friend: null, error: 'Database error'})
+        }
+        if (result.rowCount == 0) return createFriend(req, res, next)
+        db.query('UPDATE follower SET status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = $1) WHERE account_from = $2 AND account_to = $3', [status,id,follow], (err, result) => {
+            if (err) {
+                console.error(err)
+                res.send({friend: null, error: 'Database error'})
+            }
+            res.send({follow: {account_from: id, account_to: follow, status: status}, error: null})
+        })
+    })
+})
+
+// Unfollow
+router.delete('/follow', (req, res, next) => {
+    if (!req.session.user) res.send({follow: null, error: 'User not logged in'})
+    let id = req.session.user.id
+    if (!req.body || !req.body.id) return res.send({follow: null, error: 'Invalid user'})
+    let follow = Number(req.body.id)
+    db.query('DELETE FROM follower WHERE account_from = $1 AND account_to = $2', [id, follow], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({unfollow: false, error: 'Database error'})
+        }
+        res.send({unfollow: true, error: null})
+    })
+})
+
 // Search users
 router.get('/', (req, res, next) => {
     let name = validator.trim(validator.escape(req.query.name || ''))
@@ -127,33 +201,6 @@ router.put('/:id', (req, res, next) => {
             })
         })
     }
-
-})
-
-// Get friends
-router.get('/:id/friends', (req, res, next) => {
-    db.query(`SELECT * FROM friend_list WHERE id_from = $1${!(req.session.user && req.session.user.id == req.params.id) ? ' AND status = \'accepted\'' : ''}`, [validator.escape(req.params.id)], (err, result) => {
-        if (err) {
-            console.error(err)
-            return res.send({friends: null, error: 'Database error'})
-        }
-        res.send({friends: result.rows, error: null})
-    })
-})
-
-// Create friend
-router.post('/:id/friends', function createFriend(req, res, next) {
-    res.send({user: req.body.id, friend: 0})
-})
-
-// Update or create friend
-router.put('/:id/friends', (req, res, next) => {
-    res.send({user: req.body.id, friend: 0})
-})
-
-// Delete friend
-router.delete('/:id/friends', (req, res, next) => {
-    res.send({user: req.body.id, friend: 0})
 })
 
 module.exports = router

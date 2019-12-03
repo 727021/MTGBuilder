@@ -33,7 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var sess = {
   secret: process.env.SESS_SECRET,
-  cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 /* 30 days */ },
+  cookie: { maxAge: 24 * 60 * 60 * 1000 /* 24 Hours */ },
   resave: false,
   saveUninitialized: true,
   store: new pgSession({

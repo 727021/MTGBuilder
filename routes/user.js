@@ -25,9 +25,9 @@ router.get('/edit', function(req, res, next) {
   res.render('index', { title: 'MTGBuilder', extra: 'Edit Profile' });
 });
 
-// User friend list
-router.get('/friends', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder', extra: 'Friends' });
+// User followers list
+router.get('/followers', function(req, res, next) {
+  res.render('index', { title: 'MTGBuilder', extra: 'Followers' });
 });
 
 // User profile
@@ -39,20 +39,20 @@ router.get('/:id', function(req, res, next) {
       return res.redirect('/user')
     }
     let profile = result.rows[0]
-    db.query('SELECT COUNT(id_to) FROM friend_list WHERE id_from = $1', [id], (err, result) => {
+    db.query('SELECT COUNT(*) FROM follower WHERE account_to = $1 AND status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = \'accepted\')', [id], (err, result) => {
       if (err || result.rowCount === 0) {
         if (err) console.log(err)
         return res.redirect('/user')
       }
-      profile.friendsCount = result.rows[0].count
+      profile.followers = result.rows[0].count
       if (req.session.user && id == req.session.user.id) res.render('ownProfile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/ownProfile.js'], user: (req.session.user || false), profile: profile})
       else {
-        db.query('SELECT status FROM friend_list WHERE id_from = $1 AND id_to = $2 OR id_from = $2 AND id_to = $1', [id, (req.session.user || {id:0}).id], (err, result) => {
+        db.query('SELECT cl.cl_type AS status FROM follower f, common_lookup cl WHERE f.account_from = $1 AND f.account_to = $2 AND f.status = cl.common_lookup_id', [(req.session.user || {id:0}).id, id], (err, result) => {
           if (err) {
             console.log(err)
             return res.redirect('/user')
           }
-          profile.friendStatus = result.rowCount == 0 ? 'none' : result.rows[0].status
+          profile.follow = result.rowCount == 0 ? 'none' : result.rows[0].status
           res.render('profile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/profile.js'], user: (req.session.user || false), profile: profile})
         })
       }

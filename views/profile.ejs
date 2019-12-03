@@ -20,17 +20,17 @@
         </div>
         <div class="col-3">
           <div class="btn-group" role="group">
-            <button class="btn btn-primary">Friends (<%= profile.friendsCount %>)</button>
+            <button class="btn btn-primary">Friends (<%= profile.followers %>)</button>
             <% if (locals.user) { %>
-              <% if (profile.friendStatus == 'sent') { %>
-                <button class="btn btn-outline-primary" data-toggle="tooltip" data-placement="right" title="Friend Requested"><i class="fas fa-user-check"></i></button>
-              <% } else if (profile.friendStatus == 'accepted') { %>
-                <button class="btn btn-outline-primary" id="removeFriend" data-toggle="tooltip" data-placement="right" title="Remove Friend"><i class="fas fa-user-minus"></i></button>
-              <% } else if (profile.friendStatus == 'none') { %>
-                <button class="btn btn-outline-primary" id="addFriend" data-toggle="tooltip" data-placement="right" title="Add Friend"><i class="fas fa-user-plus"></i></button>
+              <% if (profile.follow == 'sent') { %>
+                <button data-follow="<%= profile.id %>" class="btn btn-outline-primary" data-toggle="tooltip" data-placement="right" title="Follow Requested"><i class="fas fa-user-check"></i></button>
+              <% } else if (profile.follow == 'accepted') { %>
+                <button data-follow="<%= profile.id %>" class="btn btn-outline-primary" id="removeFriend" data-toggle="tooltip" data-placement="right" title="Unfollow"><i class="fas fa-user-minus"></i></button>
+              <% } else if (profile.follow == 'none') { %>
+                <button data-follow="<%= profile.id %>" class="btn btn-outline-primary" id="addFriend" data-toggle="tooltip" data-placement="right" title="Follow"><i class="fas fa-user-plus"></i></button>
               <% } %>
             <% } else { %>
-              <a href="/login" class="btn btn-outline-primary" role="button"><i class="fas fa-user-plus"></i></a>
+              <a href="/login" class="btn btn-outline-primary" role="button" data-toggle="tooltip" data-placement="right" title="Follow"><i class="fas fa-user-plus"></i></a>
             <% } %>
           </div>
         </div>

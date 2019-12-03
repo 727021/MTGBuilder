@@ -1,26 +1,36 @@
 $(() => {
-    $('button#removeFriend').click(function removeFriend() {
-        $btn = $(this)
-        $btn.attr('id', 'addFriend')
-        $btn.unbind()
-        $btn.click(addFriend)
-        $btn.html('<i class="fas fa-user-plus"></i>')
-        $btn.attr('title', 'Add Friend')
-        $btn.tooltip('dispose')
-        $btn.tooltip()
-        $('#friendToastContent').html('Friend removed')
+    function toast(msg) {
+        $('#friendToastContent').html(msg || '')
         $('#friendToast').toast('show')
+    }
+
+    $('button#removeFriend').click(function removeFriend() {
+        $.ajax({
+            url: '/ajax/user/follow',
+            type: 'DELETE',
+            data: {id: $(this).attr('data-follow')},
+            success: (data) => {
+                if (data.error) return toast(data.error)
+                $(this).unbind()
+                       .click(addFriend)
+                       .html('<i class="fas fa-user-plus"></i>')
+                       .attr('title', 'Follow')
+                       .tooltip('dispose')
+                       .tooltip()
+                toast('Unfollowed')
+            }
+        })
     })
 
     $('button#addFriend').click(function addFriend() {
-        $btn = $(this)
-        $btn.removeAttr('id')
-        $btn.unbind()
-        $btn.html('<i class="fas fa-user-check"></i>')
-        $btn.attr('title', 'Friend Requested')
-        $btn.tooltip('dispose')
-        $btn.tooltip()
-        $('#friendToastContent').html('Friend request sent')
-        $('#friendToast').toast('show')
+        $.post('/ajax/user/follow', {id: $(this).attr('data-follow')}, (data) => {
+            if (data.error) return toast(data.error)
+            $(this).unbind()
+                   .html('<i class="fas fa-user-check"></i>')
+                   .attr('title', 'Follow Requested')
+                   .tooltip('dispose')
+                   .tooltip()
+            toast('Follow request sent')
+        })
     })
 })
