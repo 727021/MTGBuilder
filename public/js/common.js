@@ -6,6 +6,10 @@ $(() => {
                 $('#userLink').remove()
                 $('#navbarCollapse').append('<a href="/login" role="button" class="btn btn-primary ml-1">Login</a>')
                 $('#logoutToast').toast('show')
+                console.log(data)
+                if (data.redirect) { // Redirect after 1 second
+                    document.location.replace(data.redirect)
+                }
             }
         })
     })

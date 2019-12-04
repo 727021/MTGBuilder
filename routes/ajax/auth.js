@@ -31,8 +31,9 @@ router.get('/login', (req, res, next) => {
 })
 
 router.get('/logout', (req, res, next) => {
+    let redirect = req.session.redirect
     req.session.destroy((err) => {
-        res.send({success: !Boolean(err), error: err})
+        res.send({success: !Boolean(err), error: err, redirect: redirect})
     })
 })
 

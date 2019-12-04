@@ -4,6 +4,11 @@ var db = require('../../db')
 var validator = require('validator')
 var bcrypt = require('bcrypt')
 
+router.use('/follow', (req, res, next) => {
+    console.log(req.body)
+    next()
+})
+
 // Get followers
 router.get('/followers', (req, res, next) => {
     db.query('SELECT a.username AS account_from, cl.cl_type AS status, f.date_changed FROM follower f, account a, common_lookup cl WHERE f.account_to = $1 AND f.account_from = a.account_id AND f.status = cl.common_lookup_id', [Number((req.query || req.session.user || {id: 0}).id) || 0], (err, result) => {
@@ -42,23 +47,23 @@ router.post('/follow', function createFriend(req, res, next) {
 // Update or create follower
 router.put('/follow', (req, res, next) => {
     if (!req.session.user) res.send({follow: null, error: 'User not logged in'})
-    let id = req.session.user.id
-    if (!req.body || !req.body.id) return res.send({follow: null, error: 'Invalid user'})
-    let follow = Number(req.body.id)
+    let from = req.body.from || req.session.user.id
+    if (!req.body || !req.body.to) return res.send({follow: null, error: 'Invalid user'})
+    let to = Number(req.body.to)
     let status = req.body.status || 'sent'
     if (status !== 'sent' && status !== 'accepted') status = 'sent'
-    db.query('SELECT follower_id FROM follower WHERE account_from = $1 AND account_to = $2', [id,friend], (err, result) => {
+    db.query('SELECT follower_id FROM follower WHERE account_from = $1 AND account_to = $2', [from,to], (err, result) => {
         if (err) {
             console.error(err)
             res.send({friend: null, error: 'Database error'})
         }
         if (result.rowCount == 0) return createFriend(req, res, next)
-        db.query('UPDATE follower SET status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = $1) WHERE account_from = $2 AND account_to = $3', [status,id,follow], (err, result) => {
+        db.query('UPDATE follower SET status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = $1) WHERE account_from = $2 AND account_to = $3', [status,from,to], (err, result) => {
             if (err) {
                 console.error(err)
                 res.send({friend: null, error: 'Database error'})
             }
-            res.send({follow: {account_from: id, account_to: follow, status: status}, error: null})
+            res.send({follow: {account_from: from, account_to: to, status: status}, error: null})
         })
     })
 })
@@ -66,10 +71,10 @@ router.put('/follow', (req, res, next) => {
 // Unfollow
 router.delete('/follow', (req, res, next) => {
     if (!req.session.user) res.send({follow: null, error: 'User not logged in'})
-    let id = req.session.user.id
-    if (!req.body || !req.body.id) return res.send({follow: null, error: 'Invalid user'})
-    let follow = Number(req.body.id)
-    db.query('DELETE FROM follower WHERE account_from = $1 AND account_to = $2', [id, follow], (err, result) => {
+    let from = req.body.from || req.session.user.id
+    if (!req.body || !req.body.to) return res.send({follow: null, error: 'Invalid user'})
+    let to = Number(req.body.to)
+    db.query('DELETE FROM follower WHERE account_from = $1 AND account_to = $2', [from, to], (err, result) => {
         if (err) {
             console.error(err)
             return res.send({unfollow: false, error: 'Database error'})

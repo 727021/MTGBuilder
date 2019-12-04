@@ -46,6 +46,13 @@ if (app.get('env') === 'production') {
 }
 app.use(session(sess))
 
+app.use((req, res, next) => { // Don't redirect on logout by default
+console.log(req.session.redirect)
+  if (req.path.match(/^\/(?:(?:ajax)|(?:js)|(?:css))\//)) return next()
+  req.session.redirect = false
+  next()
+})
+
 // Set up routes
 app.use('/', indexRouter);
 app.use('/card', cardRouter)

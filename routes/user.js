@@ -23,12 +23,14 @@ router.get('/', function(req, res, next) {
 // Edit profile
 router.get('/edit', function(req, res, next) {
   if (!req.session.user) return res.redirect('/login')
+  req.session.redirect = `/user/${req.session.user.id}`
   res.render('index', { title: 'MTGBuilder', extra: 'Edit Profile' });
 });
 
 // User followers list
 router.get('/followers', function(req, res, next) {
   if (!req.session.user) return res.redirect('/login')
+  req.session.redirect = `/user/${req.session.user.id}`
   db.query('SELECT a.account_id AS id, a.username AS username, TO_CHAR(f.date_changed, \'DD Mon YYYY\') AS date_changed FROM follower f, account a WHERE f.account_to = $1 AND f.account_from = a.account_id AND f.status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = \'accepted\') ORDER BY f.date_changed DESC', [req.session.user.id], (err, result) => {
     if (err) {
       console.error(1)
@@ -50,7 +52,7 @@ router.get('/followers', function(req, res, next) {
           return res.redirect(`/user/${req.session.user.id}`)
         }
         let followed = result.rows
-        res.render('followers', { title: 'Followers - MTGBuilder', extra: 'Followers', user: req.session.user, followers: followers, requests: requests, followed: followed })
+        res.render('followers', { title: 'Followers - MTGBuilder', extra: 'Followers', user: req.session.user, followers: followers, requests: requests, followed: followed, scripts: ['/js/followers.js'] })
       })
     })
   })
@@ -71,7 +73,11 @@ router.get('/:id', function(req, res, next) {
         return res.redirect('/user')
       }
       profile.followers = result.rows[0].count
-      if (req.session.user && id == req.session.user.id) res.render('ownProfile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/ownProfile.js'], user: (req.session.user || false), profile: profile})
+      if (req.session.user && id == req.session.user.id) {
+        req.session.redirect = `/user/${req.session.user.id}`
+        console.log(req.session.redirect)
+        res.render('ownProfile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/ownProfile.js'], user: (req.session.user || false), profile: profile})
+      }
       else {
         db.query('SELECT cl.cl_type AS status FROM follower f, common_lookup cl WHERE f.account_from = $1 AND f.account_to = $2 AND f.status = cl.common_lookup_id', [(req.session.user || {id:0}).id, id], (err, result) => {
           if (err) {
