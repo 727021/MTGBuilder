@@ -58,7 +58,7 @@ router.put('/follow', (req, res, next) => {
             res.send({friend: null, error: 'Database error'})
         }
         if (result.rowCount == 0) return createFriend(req, res, next)
-        db.query('UPDATE follower SET status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = $1) WHERE account_from = $2 AND account_to = $3', [status,from,to], (err, result) => {
+        db.query('UPDATE follower SET date_changed = CURRENT_DATE, status = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'follower\' AND cl_column = \'status\' AND cl_type = $1) WHERE account_from = $2 AND account_to = $3', [status,from,to], (err, result) => {
             if (err) {
                 console.error(err)
                 res.send({friend: null, error: 'Database error'})

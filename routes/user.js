@@ -60,6 +60,7 @@ router.get('/followers', function(req, res, next) {
 
 // User profile
 router.get('/:id', function(req, res, next) {
+  req.session.redirect = ``
   let id = Number(validator.escape(req.params.id)) || 0
   db.query('SELECT * FROM account_info WHERE id = $1', [id], (err, result) => {
     if (err || result.rowCount === 0) {
@@ -74,8 +75,6 @@ router.get('/:id', function(req, res, next) {
       }
       profile.followers = result.rows[0].count
       if (req.session.user && id == req.session.user.id) {
-        req.session.redirect = `/user/${req.session.user.id}`
-        console.log(req.session.redirect)
         res.render('ownProfile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/ownProfile.js'], user: (req.session.user || false), profile: profile})
       }
       else {

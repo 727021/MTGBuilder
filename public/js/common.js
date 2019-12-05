@@ -7,7 +7,7 @@ $(() => {
                 $('#navbarCollapse').append('<a href="/login" role="button" class="btn btn-primary ml-1">Login</a>')
                 $('#logoutToast').toast('show')
                 console.log(data)
-                if (data.redirect) { // Redirect after 1 second
+                if (data.redirect !== false) { // Redirect if necessary
                     document.location.replace(data.redirect)
                 }
             }
