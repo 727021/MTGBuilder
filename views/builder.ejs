@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <div id="saveToast" class="toast" style="position: absolute; top: 10px; right: 15px;" data-delay="1500">
+        <div class="toast-header">
+            <strong class="mr-auto">MTGBuilder</strong>
+        </div>
+        <div class="toast-body text-dark" id="saveToastContent">
+        </div>
+    </div>
+    <%include partials/navbar %>
+    <div class="container my-2 bg-dark">
+        <div class="row">
+            <div class="input-group">
+                <button data-deck="<%= deck ? deck.id : -1 /* The -1 is for testing only */ %>" id="saveStatus" class="btn btn-success" data-toggle="tooltip" data-placement="left" title="Saved"><i class="fas fa-check"></i></button>
+                <input class="form-control" type="text" name="deckTitle" id="deckTitle" placeholder="Deck Title" value="<%= deck ? deck.title : '' %>">
+                <select class="form-control" name="deckVisibility" id="deckVisibility">
+                    <option disabled>-- Visibility --</option>
+                    <option value="3"<% if (deck && deck.view == 'private') { %> selected<% } %>>Private</option>
+                    <option value="4"<% if (deck && deck.view == 'followers') { %> selected<% } %>>Followers</option>
+                    <option value="5"<% if (deck && deck.view == 'public') { %> selected<% } %>>Public</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3 border-default border-right px-0 pt-1">
+                <form action="/card" id="cardSearch">
+                    <div class="vertical-input-group">
+                        <div class="input-group">
+                            <input class="form-control" type="text" name="cardName" id="cardName" placeholder="Card Name">
+                        </div>
+                        <div class="input-group">
+                            <select class="form-control" name="cardType" id="cardType">
+                                <option selected value="-1">-- Type --</option>
+                                <option value="0">Artifact</option>
+                                <option value="1">Conspiracy</option>
+                                <option value="2">Creature</option>
+                                <option value="3">Enchantment</option>
+                                <option value="4">Hero</option>
+                                <option value="5">Instant</option>
+                                <option value="6">Land</option>
+                                <option value="7">Phenomenon</option>
+                                <option value="8">Plane</option>
+                                <option value="9">Planeswalker</option>
+                                <option value="10">Scheme</option>
+                                <option value="11">Sorcery</option>
+                                <option value="12">Summon</option>
+                                <option value="13">Tribal</option>
+                                <option value="14">Vanguard</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <select name="cardSet" id="cardSet" class="form-control">
+                                <option selected value="-1">-- Set --</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <select name="cardRarity" id="cardRarity" class="form-control">
+                                <option value="-1">-- Rarity --</option>
+                                <option value="0">Common</option>
+                                <option value="1">Uncommon</option>
+                                <option value="2">Rare</option>
+                                <option value="3">Mythic Rare</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <button disabled type="submit" class="btn btn-primary w-100" id="searchCards"><div class="spinner-border spinner-border-sm" style="border-radius: 90;" role="status"></div> Loading...</button>
+                        </div>
+                    </div>
+                </form>
+                <table class="table table-hover card-list m-0">
+                    <tbody id="searchResults"></tbody>
+                    <tfoot id="tfootSearchCards" style="display: none;">
+                        <tr><td class="align-middle text-center p-0"><button class="btn btn-primary w-100" id="loadMore">Load More</button></td></tr>
+                    </tfoot>
+                </table>
+            </div>
+            <div class="col-5 pt-1">
+                <div class="container" id="cardDetails">
+                </div>
+            </div>
+            <div class="col-4 border-default border-left px-0 pt-1">
+                <table class="table table-hover card-list m-0">
+                    <thead><tr><th class="align-middle p-2">Total Cards: <span id="totalCards">0</span></th></tr></thead>
+                    <tbody id="deckCards">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <%include partials/scripts %>
+  </body>
+</html>

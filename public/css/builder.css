@@ -1,0 +1,45 @@
+table, thead, tbody, tfoot, tr, th, td {
+    width: 100%;
+    display: block;
+}
+
+.card-list tbody {
+    display: block;
+    width: 100%;
+    overflow-y: auto;
+    max-height: 50vh;
+}
+
+span.searchName {
+    padding-left: 0.25rem;
+}
+
+.spinner-border {
+    border-radius: 50% !important;
+}
+
+/* From https://stackoverflow.com/a/55864043/2031203 */
+.vertical-input-group .input-group:first-child {
+    padding-bottom: 0;
+}
+.vertical-input-group .input-group:first-child * {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.vertical-input-group .input-group:last-child {
+    padding-top: 0;
+}
+.vertical-input-group .input-group:last-child * {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+.vertical-input-group .input-group:not(:last-child):not(:first-child) {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.vertical-input-group .input-group:not(:last-child):not(:first-child) * {
+    border-radius: 0;
+}
+.vertical-input-group .input-group:not(:first-child) * {
+    border-top: 0;
+}
