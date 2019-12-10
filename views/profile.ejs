@@ -6,13 +6,6 @@
   </head>
   <body>
     <%include partials/navbar %>
-    <div id="friendToast" class="toast" style="position: absolute; top: 10px; right: 15px;" data-delay="2000">
-        <div class="toast-header">
-            <strong class="mr-auto">MTGBuilder</strong>
-        </div>
-        <div class="toast-body text-dark" id="friendToastContent">
-        </div>
-    </div>
     <div class="container mt-2 pt-2 bg-dark">
       <div class="row">
         <div class="col-9">
@@ -37,7 +30,36 @@
       </div>
       <div class="row">
         <!-- Main content (decks) -->
-        <div class="col-12 col-md-9">Recent Decks (Coming Soon)</div>
+        <div class="col-12 col-md-9">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th class="align-middle"><h5 class="m-0">Decks</h5></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="deckList">
+              <% profile.decks.forEach(deck => { %>
+              <tr>
+                <td class="align-middle py-2"><%= deck.title %></td>
+                <td class="align-middle py-2">
+                  <a href="/deck/<%= deck.id %>" class="btn btn-success" role="button" data-toggle="tooltip" data-placement="top" title="Open"><i class="far fa-folder-open"></i></a>
+                  <% if (user) { %>
+                  <button class="btn btn-success copy-deck" data-deck="<%= deck.id %>" data-toggle="tooltip" data-placement="top" title="Copy"><i class="far fa-copy"></i></button>
+                  <% } else { %>
+                  <a href="/login" class="btn btn-success" role="button" data-toggle="tooltip" data-placement="top" title="Copy"><i class="far fa-copy"></i></a>
+                  <% } %>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+            <tfoot id="tfootDeckList">
+              <% if (!profile.decks || profile.decks.length == 0) { %>
+              <tr><td colspan="2" class="text-center">No decks</td></tr>
+              <% } %>
+            </tfoot>
+          </table>
+        </div>
         <!-- Sidebar -->
         <div class="col-12 col-md-3">
           <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') %></span>

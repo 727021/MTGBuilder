@@ -84,7 +84,15 @@ router.get('/:id', function(req, res, next) {
             return res.redirect('/user')
           }
           profile.follow = result.rowCount == 0 ? 'none' : result.rows[0].status
-          res.render('profile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/profile.js'], user: (req.session.user || false), profile: profile})
+          db.query('SELECT deck_id AS id, title FROM deck WHERE account_id = $1 AND view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'deck\' AND cl_column = \'view\' AND cl_type = \'public\') ORDER BY last_edit DESC', [id], (err, result) => {
+            if (err) {
+              console.log(err)
+              profile.decks = []
+            } else{
+              profile.decks = result.rows
+            }
+            res.render('profile', {title: `Profile - ${profile.username} - MTGBuilder`, extra: `Profile - ${profile.username}`, scripts: ['/js/profile.js'], user: (req.session.user || false), profile: profile})
+          })
         })
       }
     })

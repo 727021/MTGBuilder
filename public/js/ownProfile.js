@@ -28,13 +28,11 @@ $(() => {
                     type: 'DELETE',
                     success: (data, status, xhr) => {
                         if (data.error) {
-                            $('#deleteToastContent').html(data.error)
-                            return $('#deleteToast').toast('show')
+                            return createToast(data.error, 'MTGBuilder - ERROR')
                         }
                         console.log(data)
                         $btn.parent().parent().remove()
-                        $('#deleteToastContent').html(`Deleted <i>${data.delete}</i>`)
-                        $('#deleteToast').toast('show')
+                        createToast(`Deleted <i>${data.delete}</i>`, 'MTGBuilder', 2000)
                         if ($('#deckList').children().length == 0) $('#tfootDeckList').html('<tr><td colspan="2" class="text-center">No decks</td></tr>')
                     }
                 })

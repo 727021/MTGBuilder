@@ -1,9 +1,4 @@
 $(() => {
-    function toast(msg) {
-        $('#followerToastContent').html(msg)
-        $('#followerToast').toast('show')
-    }
-
     function getDateString() {
         let now = new Date().toLocaleDateString('en-US', {day: 'numeric', month: 'short', year: 'numeric'}).replace(',', '').split(' ')
         return `${now[1]} ${now[0]} ${now[2]}`
@@ -20,7 +15,7 @@ $(() => {
             method: 'PUT',
             data: {from: follow, to: id, status: 'accepted'},
             success: (data, status, xhr) => {
-                if (data.error) return toast(data.error)
+                if (data.error) return createToast(data.error, 'MTGBuilder - ERROR', 2000)
                 $('[data-toggle="tooltip"]').tooltip('dispose')
                 // Add row to #followers
                 $('#followers').prepend(`<tr>
@@ -38,7 +33,7 @@ $(() => {
                 // Conditionally add tfoot to requests table
                 if (+$('#requests-count').html() == 0) $('#requests').parent().append('<tfoot><tr><td colspan="2" class="text-center">No follow requests</td></tr></tfoot>')
                 // Show toast
-                toast('Follow request accepted')
+                createToast('Follow request accepted', 'MTGBuilder', 2000)
             }
         })
     })
@@ -53,13 +48,13 @@ $(() => {
             method: 'DELETE',
             data: {from: follow, to: id},
             success: (data, status, xhr) => {
-                if (data.error) return toast(data.error)
+                if (data.error) return createToast(data.error, 'MTGBuilder - ERROR', 2000)
                 $('[data-toggle="tooltip"]').tooltip('dispose')
                 $btn.parent().parent().remove()
                 $('[data-toggle="tooltip"]').tooltip()
                 $('#requests-count').html(Number($('#requests-count').html()) - 1)
                 if (+$('#requests-count').html() == 0) $('#requests').parent().append('<tfoot><tr><td colspan="2" class="text-center">No follow requests</td></tr></tfoot>')
-                toast('Follow request declined')
+                createToast('Follow request declined', 'MTGBuilder', 2000)
             }
         })
     })
@@ -74,13 +69,13 @@ $(() => {
             method: 'DELETE',
             data: {from: id, to: follow},
             success: (data, status, xhr) => {
-                if (data.error) return toast(data.error)
+                if (data.error) return createToast(data.error, 'MTGBuilder - ERROR', 2000)
                 $('[data-toggle="tooltip"]').tooltip('dispose')
                 $btn.parent().parent().remove()
                 $('[data-toggle="tooltip"]').tooltip()
                 $('#followed-count').html(Number($('#followed-count').html()) - 1)
                 if (+$('#followed-count').html() == 0) $('#followed').parent().append('<tfoot><tr><td colspan="2" class="text-center">No users followed</td></tr></tfoot>')
-                toast('User unfollowed')
+                createToast('User unfollowed', 'MTGBuilder', 2000)
             }
         })
     })

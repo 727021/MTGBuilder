@@ -5,7 +5,7 @@ $(() => {
                 $('#userLink [data-toggle="tooltip"]').tooltip('dispose')
                 $('#userLink').remove()
                 $('#navbarCollapse').append('<a href="/login" role="button" class="btn btn-primary ml-1">Login</a>')
-                $('#logoutToast').toast('show')
+                createToast('Log out successful', 'MTGBuilder', 2000)
                 console.log(data)
                 if (data.redirect !== false) { // Redirect if necessary
                     document.location.replace(data.redirect)
@@ -30,8 +30,6 @@ $(() => {
     })
 
     $('[data-toggle="tooltip"]').tooltip()
-
-    $('.toast').toast()
 })
 
 /**
@@ -97,4 +95,15 @@ function parseSymbols(text) {
         .replace(/\[\+(\d+)\]/g, '<i class="ms ms-loyalty-up ms-loyalty-$1"></i>')// Up loyalty
         .replace(/\[[-−](\d+)\]/g, '<i class="ms ms-loyalty-down ms-loyalty-$1"></i>')// Down loyalty
         .replace(/(\(.+\))/g, '<i>$1</i>')// Italicize help text
+}
+
+function createToast(msg, title, seconds) {
+    let id = `toast${$('.toast').length}`
+    $('#toastContainer').prepend(`
+    <div class="toast" id="${id}" data-delay="${seconds}">
+    <div class="toast-header"><strong class="mr-auto">${title}</strong></div>
+    <div class="toast-body text-dark">${msg}</div>
+    </div>`)
+    $(`#${id}`).on('hidden.bs.toast', function() { $(this).remove() })
+    $(`#${id}`).toast().toast('show')
 }

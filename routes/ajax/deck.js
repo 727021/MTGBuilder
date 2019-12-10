@@ -46,6 +46,18 @@ router.get('/:id', (req, res, next) => {
     })
 })
 
+// Copy deck
+router.post('/:id', (req, res, next) => {
+    if (!req.session.user) return res.send({id: null, error: 'User not logged in'})
+    db.query('INSERT INTO deck (deck_id,account_id,title,cards,cover,view) (SELECT nextval(\'deck_deck_id_seq\'), $1, title, cards, cover, view FROM deck WHERE deck_id = $2) RETURNING deck_id', [req.session.user.id, +req.params.id], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({id: null, error: 'Database error'})
+        }
+        res.send({id: result.rows[0].deck_id, error: null})
+    })
+})
+
 // Create deck
 router.post('/', (req, res, next) => {
     if (!req.session.user) return res.send({id: null})
