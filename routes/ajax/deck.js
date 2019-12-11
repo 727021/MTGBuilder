@@ -13,9 +13,9 @@ router.get('/', (req, res, next) => {
     if (req.query && req.query.owner && Number(req.query.owner) && Number(req.query.owner) > 0) {
         params.push(Number(req.query.owner))
         query += ` AND d.account_id = $${params.length}`
-        if (!req.session.user || req.session.user.id != Number(req.query.owner)) {
-            query += ' AND d.view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'deck\' AND cl_column = \'view\' AND cl_type = \'public\')'
-        }
+    }
+    if (!req.session.user || (req.query && req.query.owner && Number(req.query.owner) && Number(req.query.owner) > 0 && req.session.user.id != Number(req.query.owner))) {
+        query += ' AND d.view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'deck\' AND cl_column = \'view\' AND cl_type = \'public\')'
     }
     db.query(query, params, (err, result) => {
         if (err) {
