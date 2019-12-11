@@ -15,6 +15,7 @@ router.get('/', (req, res, next) => {
         query += ` AND d.account_id = $${params.length}`
     }
     query += ` AND (d.view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'deck\' AND cl_column = \'view\' AND cl_type = \'public\') OR (d.account_id = ${(req.session.user || {id:0}).id}))`
+    query += ' ORDER BY d.last_edit DESC'
     db.query(query, params, (err, result) => {
         if (err) {
             console.error(err)
