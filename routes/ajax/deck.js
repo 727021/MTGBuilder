@@ -5,11 +5,10 @@ var validator = require('validator')
 
 // Deck search
 router.get('/', (req, res, next) => {
-    let query = 'SELECT d.deck_id AS id, d.account_id AS owner, d.title, c.cl_type AS view FROM deck d, common_lookup c WHERE c.common_lookup_id = d.view'
+    let query = 'SELECT d.deck_id AS id, d.account_id AS owner, a.username AS owner_name, d.title, c.cl_type AS view FROM deck d, account a, common_lookup c WHERE c.common_lookup_id = d.view AND d.account_id = a.account_id'
     let params = []
     if (req.query && req.query.title) {
-        params.push(req.query.title.trim() == '' ? 'Untitled' : validator.escape(req.query.title))
-        query += ` AND d.title = $${params.length}`
+        query += ` AND d.title ILIKE '%${req.query.title.trim() == '' ? 'Untitled' : validator.escape(req.query.title)}%'`
     }
     if (req.query && req.query.owner && Number(req.query.owner) && Number(req.query.owner) > 0) {
         params.push(Number(req.query.owner))

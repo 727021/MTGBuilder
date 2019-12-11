@@ -5,7 +5,20 @@ var validator = require('validator')
 
 // Deck search
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'MTGBuilder' });
+  if (!req.session.query) req.session.query = {name: ''}
+  if (req.query && req.query.name) {
+    req.session.query.name = req.query.name
+    return res.redirect('/deck')
+  }
+  let name = req.session.query.name
+  req.session.query.name = ''
+  db.query('SELECT a.account_id AS id, a.username FROM account a WHERE COALESCE((SELECT COUNT(d.deck_id) FROM deck d WHERE d.account_id = a.account_id AND d.view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = \'deck\' AND cl_column = \'view\' AND cl_type = \'public\')), 0) > 0', [], (err, result) => {
+    if (err) {
+      console.error(err)
+      return res.redirect('/')
+    }
+    res.render('deckSearch', {title: 'Decks - MTGBuilder', extra: 'Decks', scripts: ['/js/searchDeck.js', '/js/top.js'], styles: ['/css/search.css', '/css/top.css'], query: name, user: req.session.user || false, users: result.rows })
+  })
 });
 
 // View deck

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div class="container my-2 bg-dark">
+    <div class="row">
+        <div class="col">
+            <form id="searchForm" action="/deck">
+                <div class="row">
+                    <div class="input-group">
+                        <input class="form-control" type="text" name="deckTitle" id="deckTitle" placeholder="Title" value="<%= query %>">
+                        <select name="deckOwner" id="deckOwner">
+                            <option value="" selected>-- Owner --</option>
+                            <% users.forEach(u => { %>
+                            <option value="<%= u.id %>"><%= u.username %></option>
+                            <% }) %>
+                        </select>
+                        <button type="submit" class="btn btn-primary">Search Decks</button>
+                        <button type="reset" class="btn btn-danger" data-toggle="tooltip" data-placement="bottom" title="Clear Search"><i class="fas fa-times"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Title</th>
+                        <th>Owner</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                </tbody>
+                <tfoot id="tfoot"></tfoot>
+            </table>
+        </div>
+    </div>
+    </div>
+    <%include partials/top %>
+    <%include partials/scripts %>
+  </body>
+</html>

@@ -101,7 +101,7 @@ router.get('/:id', function(req, res, next) {
 
 // User decks
 router.get('/:id/decks', function(req, res, next) {
-    res.render('index', { title: 'MTGBuilder' });
+    res.redirect(`./`)
 });
 
 module.exports = router;
