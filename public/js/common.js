@@ -29,6 +29,11 @@ $(() => {
         document.location.replace(`/user${name.trim() === '' ? '' : `?name=${name}`}`)
     })
 
+    $('#navbarSearchDecks').click(() => {
+        let name = $('#navbarSearch').val()
+        document.location.replace(`/deck${name.trim() === '' ? '' : `?name=${name}`}`)
+    })
+
     $('[data-toggle="tooltip"]').tooltip()
 })
 
