@@ -62,11 +62,13 @@
         </div>
         <!-- Sidebar -->
         <div class="col-12 col-md-3">
+          <% if (profile.status) { %>
           <div class="p-1">
             <p class="m-0"><b>Status:</b> <span id="statusDate" class="text-muted"><%= profile.status_date %></span></p>
             <textarea readonly class="pl-2 ml-2 mb-2 border-none border-left text-wrap noresize form-control-plaintext" id="status" rows="1"><%= profile.status %></textarea>
           </div>
           <hr class="my-1">
+          <% } %>
           <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
           <br>
           <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
