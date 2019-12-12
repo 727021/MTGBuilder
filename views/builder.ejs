@@ -20,7 +20,7 @@
                 <select class="form-control" name="deckVisibility" id="deckVisibility">
                     <option disabled>-- Visibility --</option>
                     <option value="3"<% if (deck && deck.view == 'private') { %> selected<% } %>>Private</option>
-                    <option value="4"<% if (deck && deck.view == 'followers') { %> selected<% } %>>Followers</option>
+                    <!-- <option value="4"<%# if (deck && deck.view == 'followers') { %> selected<%# } %>>Followers</option> -->
                     <option value="5"<% if (deck && deck.view == 'public') { %> selected<% } %>>Public</option>
                 </select>
             </div>

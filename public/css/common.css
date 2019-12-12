@@ -4,3 +4,11 @@ a.hoverline {
 a.hoverline:hover {
     text-decoration: underline !important;
 }
+
+textarea.noresize {
+    resize: none;
+}
+
+[readonly] {
+    outline: none;
+}

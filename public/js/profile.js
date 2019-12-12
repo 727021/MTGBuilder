@@ -51,4 +51,10 @@ $(() => {
             })
         })
     })
+
+    function statusHeight() {
+        $('#status')[0].style.height = ""
+        $('#status')[0].style.height = ($('#status')[0].scrollHeight + 5) + 'px'
+    }
+    statusHeight()
 })

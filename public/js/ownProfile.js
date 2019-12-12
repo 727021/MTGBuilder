@@ -30,7 +30,6 @@ $(() => {
                         if (data.error) {
                             return createToast(data.error, 'MTGBuilder - ERROR')
                         }
-                        console.log(data)
                         $btn.parent().parent().remove()
                         createToast(`Deleted <i>${data.delete}</i>`, 'MTGBuilder', 2000)
                         if ($('#deckList').children().length == 0) $('#tfootDeckList').html('<tr><td colspan="2" class="text-center">No decks</td></tr>')
@@ -72,5 +71,53 @@ $(() => {
     $('#newDeckModal').on('show.bs.modal', function() {
         $('#createError').hide()
         $('#newDeckForm')[0].reset()
+    })
+
+    $('#statusInput').keydown(function(e) {
+        if (e.key == 'Enter' || e.key == '\\') {
+            e.preventDefault()
+            return $('#statusForm').submit()
+        }
+    })
+
+    $('#statusInput').keyup(function(e) {
+        let count = $(this).val().trim().length
+        $('#charCount').html(count)
+    })
+
+    function statusHeight() {
+        $('#status')[0].style.height = ""
+        $('#status')[0].style.height = ($('#status')[0].scrollHeight + 5) + 'px'
+    }
+    statusHeight()
+    $('#statusForm').submit(function(e) {
+        e.preventDefault()
+        let newStatus = $('#statusInput').val().trim()
+        if (newStatus == '') return
+        if (newStatus.length > 64) {
+            createToast('Status is too long', 'MTGBuilder', 2000)
+            $('#statusInput').val(newStatus.slice(0, 64)).attr('maxlength', '64')
+            return false
+        }
+
+        $.ajax({
+            url: `/ajax/user/${userID}`,
+            data: JSON.parse(`{"status": "${newStatus}"}`),
+            type: 'PUT',
+            success: function(data, status, xhr) {
+                if (data.error) {
+                    createToast(data.error, `MTGBuilder${data.error == 'Database error' ? ' - ERROR' : ''}`, 2000)
+                } else {
+                    $('#statusInput').val('').blur()
+                    $('#status').html(data.user.status)
+                    $('#statusDate').html(data.user.status_date)
+                    $('#charCount').html(0)
+                    statusHeight()
+                    createToast('Status updated', 'MTGBuilder', 2000)
+                }
+            }
+        })
+
+        return false
     })
 })

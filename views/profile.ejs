@@ -9,7 +9,7 @@
     <div class="container mt-2 pt-2 bg-dark">
       <div class="row">
         <div class="col-9">
-          <h3><%= profile.username %> <small class="text-muted text-truncate"><%= profile.status %></small></h3>
+          <h3><%= profile.username %></h3>
         </div>
         <div class="col-3">
           <div class="btn-group" role="group">
@@ -62,9 +62,14 @@
         </div>
         <!-- Sidebar -->
         <div class="col-12 col-md-3">
-          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') %></span>
+          <div class="p-1">
+            <p class="m-0"><b>Status:</b> <span id="statusDate" class="text-muted"><%= profile.status_date %></span></p>
+            <textarea readonly class="pl-2 ml-2 mb-2 border-none border-left text-wrap noresize form-control-plaintext" id="status" rows="1"><%= profile.status %></textarea>
+          </div>
+          <hr class="my-1">
+          <span class="text-truncate"><b>Last Seen:</b> <%= profile.last_login.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
           <br>
-          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') %></span>
+          <span class="text-truncate"><b>Joined:</b> <%= profile.joined.replace(/(?:^|\ )0/g, ' ') /* Strip leading zeroes */ %></span>
         </div>
       </div>
     </div>

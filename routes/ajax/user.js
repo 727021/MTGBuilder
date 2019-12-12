@@ -161,7 +161,7 @@ router.post('/', function createUser(req, res, next) {
 router.put('/:id', (req, res, next) => {
     if (!(req.session.user && (req.session.user.id == req.params.id || req.session.user.type == 'admin')))
         return res.status(403).send({user: null, error: 'User not logged in'})
-    if (!req.body || !(req.body.username || req.body.password || req.body.email)) {
+    if (!req.body || !(req.body.username || req.body.password || req.body.email || req.body.status)) {
         db.query('SELECT * FROM account_info WHERE id = $1', [req.params.id], (err, result) => {
             if (err) {
                 console.error(err)
@@ -170,7 +170,7 @@ router.put('/:id', (req, res, next) => {
             return res.send({user: result.rows[0], error: null})
         })
     } else {
-        // TODO make sure username/email isn't already taken
+        let status = validator.trim(validator.escape(req.body.status || ''))
         let username = validator.trim(validator.escape(req.body.username || ''))
         let password = validator.trim(validator.escape(req.body.password || ''))
         let email = validator.trim(validator.escape(req.body.email || ''))
@@ -179,8 +179,11 @@ router.put('/:id', (req, res, next) => {
         if (email != '' && !validator.isEmail(email)) return res.send({user: null, error: 'Invalid email'})
         if (password != '' && password.length < 8) return res.send({user: null, error: 'Password must be at least 8 characters long'})
         query = []
+        if (status != '') {
+            query.push(`status = '${status}', status_date = CURRENT_DATE`)
+        }
         if (username != '') {
-            query.push(`username = $${username}`)
+            query.push(`username = '${username}'`)
         }
         if (password != '') {
             query.push(`password = '${bcrypt.hashSync(password, 10)}'`)

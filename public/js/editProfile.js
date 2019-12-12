@@ -57,7 +57,6 @@ $(() => {
                     if (data.error) {
                         if (data.error != 'Database error') {
                             $input.addClass('is-invalid').select()
-                            console.log('non-database error')
                         }
                         createToast(data.error, `MTGBuilder${data.error == 'Database error' ? ' - ERROR' : ''}`, 2000)
                     } else {
