@@ -24,7 +24,14 @@ router.get('/', function(req, res, next) {
 router.get('/edit', function(req, res, next) {
   if (!req.session.user) return res.redirect('/login')
   req.session.redirect = `/user/${req.session.user.id}`
-  res.render('index', { title: 'MTGBuilder', extra: 'Edit Profile' });
+  db.query('SELECT * FROM account_info WHERE id = $1', [req.session.user.id], (err, result) => {
+    if (err) {
+      console.error(err)
+      return res.redirect(`/user/${req.session.user.id}`)
+    }
+    console.log(result.rows[0])
+    res.render('editProfile', { title: 'Edit Profile - MTGBuilder', extra: 'Edit Profile', user: req.session.user, profile: result.rows[0], scripts: ['/js/editProfile.js'] });
+  })
 });
 
 // User followers list

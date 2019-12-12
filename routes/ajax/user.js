@@ -161,7 +161,7 @@ router.post('/', function createUser(req, res, next) {
 router.put('/:id', (req, res, next) => {
     if (!(req.session.user && (req.session.user.id == req.params.id || req.session.user.type == 'admin')))
         return res.status(403).send({user: null, error: 'User not logged in'})
-    if (!req.query || !(req.query.username || req.query.password || req.query.email)) {
+    if (!req.body || !(req.body.username || req.body.password || req.body.email)) {
         db.query('SELECT * FROM account_info WHERE id = $1', [req.params.id], (err, result) => {
             if (err) {
                 console.error(err)
@@ -170,39 +170,45 @@ router.put('/:id', (req, res, next) => {
             return res.send({user: result.rows[0], error: null})
         })
     } else {
-        let username = validator.trim(validator.escape(req.query.username || ''))
-        let password = validator.trim(validator.escape(req.query.password || ''))
-        let email = validator.trim(validator.escape(req.query.email || ''))
+        // TODO make sure username/email isn't already taken
+        let username = validator.trim(validator.escape(req.body.username || ''))
+        let password = validator.trim(validator.escape(req.body.password || ''))
+        let email = validator.trim(validator.escape(req.body.email || ''))
         if (username != '' && !validator.matches(username, /^[A-Za-z0-9_]+$/)) return res.send({user: null, error: 'Username must contain only letters, numbers, and underscore'})
         if (username != '' && !validator.matches(username, /[A-Za-z0-9]+/)) return res.send({user: null, error: 'Username must contain at least one letter or number'})
         if (email != '' && !validator.isEmail(email)) return res.send({user: null, error: 'Invalid email'})
         if (password != '' && password.length < 8) return res.send({user: null, error: 'Password must be at least 8 characters long'})
         query = []
-        params = []
         if (username != '') {
-            params.push(username)
-            query.push(`username = $${params.length}`)
+            query.push(`username = $${username}`)
         }
         if (password != '') {
-            params.push(bcrypt.hashSync(password, 10))
-            query.push(`password = $${params.length}`)
+            query.push(`password = '${bcrypt.hashSync(password, 10)}'`)
         }
         if (email != '') {
-            params.push(email)
-            query.push(`email = $${params.length}`)
+            query.push(`email = '${email}'`)
         }
-        params.push(req.params.id)
-        db.query(`UPDATE account SET ${query.join(', ')} WHERE id = $${params.length} RETURNING account_id`, params, (err, result) => {
+        console.log(query.join(', '))
+
+        db.query(`SELECT account_id, username, email FROM account WHERE username = '${username}' OR email = '${email}' LIMIT 1`, [], (err, result) => {
             if (err) {
                 console.error(err)
                 return res.send({user: null, error: 'Database error'})
             }
-            db.query('SELECT * FROM account_info WHERE id = $1', [result.rows[0].account_id], (err, result) => {
+            console.log(result)
+            if ((email || username) && result.rowCount > 0) return res.send({user: null, error: `An account with that ${(username == result.rows[0].username) ? 'username' : 'email'} already exists`})
+            db.query(`UPDATE account SET ${query.join(', ')} WHERE account_id = ${+req.params.id} RETURNING account_id`, [], (err, result) => {
                 if (err) {
                     console.error(err)
                     return res.send({user: null, error: 'Database error'})
                 }
-                res.send({user: result.rows[0], error: null})
+                db.query('SELECT * FROM account_info WHERE id = $1', [result.rows[0].account_id], (err, result) => {
+                    if (err) {
+                        console.error(err)
+                        return res.send({user: null, error: 'Database error'})
+                    }
+                    res.send({user: result.rows[0], error: null})
+                })
             })
         })
     }

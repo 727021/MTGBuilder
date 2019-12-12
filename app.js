@@ -47,7 +47,7 @@ if (app.get('env') === 'production') {
 app.use(session(sess))
 
 app.use((req, res, next) => { // Don't redirect on logout by default
-  if (req.path.match(/^\/(?:(?:ajax)|(?:js)|(?:css))\//)) return next()
+  if (req.path.match(/^\/(?:(?:ajax)|(?:js)|(?:css))\/?.*/)) return next()
   req.session.redirect = false
   next()
 })

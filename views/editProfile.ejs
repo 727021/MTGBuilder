@@ -1,0 +1,54 @@
+<%# This page is for viewing another user's profile %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%include partials/head %>
+  </head>
+  <body>
+    <%include partials/navbar %>
+    <div class="container mt-2 py-2 bg-dark">
+        <span class="d-none" id="userID"><%= profile.id %></span>
+        <div class="row">
+          <div class="col-3 d-none d-md-block"></div>
+          <div class="col">
+            <div class="row">
+              <div class="align-middle col-3">Username:</div>
+              <div class="align-middle col"><%= profile.username %></div>
+              <div class="align-middle col-3"><button class="btn invisible" disabled><i class="fas"></i></button></div>
+            </div>
+            <div class="row">
+              <div class="col-3">Email:</div>
+              <div class="col">
+                <input data-column="email" type="text" name="email" class="form-control" style="display: none;" placeholder="New Email">
+                <span data-column="email" id="display"><%= profile.email.replace(/^(.{3}).+(\@.+\..+)/, '$1*****$2') %></span>
+              </div>
+              <div class="col-3">
+                <button data-column="email" class="btn btn-success editButton" data-toggle="tooltip" data-placement="left" title="Edit"><i class="fas fa-edit"></i></button>
+                <span data-column="email" id="editButtons" style="display: none;">
+                  <button data-column="email" class="btn btn-success saveButton" data-toggle="tooltip" data-placement="left" title="Save"><i class="fas fa-save"></i></button>
+                  <button data-column="email" class="btn btn-danger discardButton" data-toggle="tooltip" data-placement="right" title="Discard"><i class="fas fa-trash-alt"></i></button>
+                </span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-3">Password:</div>
+              <div class="col">
+                <input data-column="password" type="password" name="password" class="form-control" style="display: none;" placeholder="New Password">
+                <span data-column="password" id="display">********</span>
+              </div>
+              <div class="col-3">
+                <button data-column="password" class="btn btn-success editButton" data-toggle="tooltip" data-placement="left" title="Edit"><i class="fas fa-edit"></i></button>
+                <span data-column="password" id="editButtons" style="display: none;">
+                  <button data-column="password" class="btn btn-success saveButton" data-toggle="tooltip" data-placement="left" title="Save"><i class="fas fa-save"></i></button>
+                  <button data-column="password" class="btn btn-danger discardButton" data-toggle="tooltip" data-placement="right" title="Discard"><i class="fas fa-trash-alt"></i></button>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="col-3 d-none d-md-block"></div>
+        </div>
+    </div>
+
+    <%include partials/scripts %>
+  </body>
+</html>
