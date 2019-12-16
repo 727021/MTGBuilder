@@ -27,7 +27,14 @@ router.get('/', (req, res, next) => {
 
 // Recent decks
 router.get('/recent', (req, res, next) => {
-    res.send({decks: []})
+    let count = (req.query && req.query.count && Number(req.query.count) && +req.query.count > 0) ? +req.query.count : false
+    db.query(`SELECT d.deck_id AS id, a.account_id AS owner_id, a.username AS owner, d.title FROM deck d, account a WHERE d.account_id = a.account_id AND d.view = (SELECT common_lookup_id FROM common_lookup WHERE cl_table = 'deck' AND cl_column = 'view' AND cl_type = 'public') ORDER BY d.last_edit DESC LIMIT ${count || 8}`, [], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({decks: null, error: 'Database error'})
+        }
+        res.send({decks: result.rows, error: null})
+    })
 })
 
 // Deck details

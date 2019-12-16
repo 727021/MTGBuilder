@@ -6,8 +6,29 @@
   <body>
     <%include partials/navbar %>
     <div class="container mt-2 bg-dark">
-      <h1><%= title %></h1>
-      <p>Coming soon!</p>
+      <h1 class="display-3">MTGBuilder</h1>
+
+      <div class="row border-top">
+        <div class="col-9 pt-2">
+          <h4>Recent Decks</h4>
+          <table class="table table-hover" id="recentDecks">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Owner</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot></tfoot>
+          </table>
+        </div>
+        <div class="col-3 border-left pt-2">
+          <h4>Status Updates</h4>
+          <hr class="m-1" />
+          <div id="statusUpdates"></div>
+        </div>
+      </div>
     </div>
 
     <%include partials/scripts %>

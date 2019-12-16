@@ -4,9 +4,21 @@ var db = require('../../db')
 var validator = require('validator')
 var bcrypt = require('bcrypt')
 
-router.use('/follow', (req, res, next) => {
-    console.log(req.body)
-    next()
+// router.use('/follow', (req, res, next) => {
+//     console.log(req.body)
+//     next()
+// })
+
+// Get recent status updates
+router.get('/recent', (req, res, next) => {
+    let count = (req.query && req.query.count && Number(req.query.count) && +req.query.count > 0) ? +req.query.count : false
+    db.query(`SELECT account_id, username, status, TO_CHAR(status_date, \'DD Mon YYYY\') AS status_date FROM account WHERE status <> \'\' ORDER BY status_date DESC LIMIT ${count || 5}`, [], (err, result) => {
+        if (err) {
+            console.error(err)
+            return res.send({users: null, error: 'Database error'})
+        }
+        return res.send({users: result.rows, error: null})
+    })
 })
 
 // Get followers
