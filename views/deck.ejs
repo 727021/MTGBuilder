@@ -13,7 +13,7 @@
                 <% } else { %>
                 <a href="/login" class="btn btn-success" role="button" data-toggle="tooltip" data-placement="left" title="Copy"><i class="far fa-copy"></i></a>
                 <% } %>
-                <input class="form-control" readonly type="text" name="deckTitle" id="deckTitle" placeholder="Deck Title" value="<%= deck ? deck.title : '' %>">
+                <input class="form-control" readonly type="text" name="deckTitle" id="deckTitle" placeholder="Deck Title" value="<%- deck ? deck.title : '' %>">
             </div>
         </div>
         <div class="row">
