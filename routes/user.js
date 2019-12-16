@@ -106,7 +106,7 @@ router.get('/:id', function(req, res, next) {
   })
 });
 
-// User decks
+// User decks (NOT USED)
 router.get('/:id/decks', function(req, res, next) {
     res.redirect(`./`)
 });
