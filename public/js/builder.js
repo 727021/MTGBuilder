@@ -21,7 +21,7 @@ $(() => {
     function save() {
         if (isSaving) return needsSave = true
         saving()
-        let title = $('#deckTitle').val()
+        let title = $('#deckTitle').val().replace(/\</g, '').replace(/\>/g, '')
         if (title.trim() == '') title = 'Untitled'
         let visibility = +$('#deckVisibility').val()
         if (visibility < 3 || visibility > 5) visibility = 4
@@ -45,6 +45,13 @@ $(() => {
 
     $('#deckTitle').blur(save)
     $('#deckVisibility').change(save)
+
+    $('#deckTitle').keydown(function(e) {
+        if (e.key == '<' || e.key == '>' || e.key == '\\') {
+            e.preventDefault()
+            return false
+        }
+    })
     //#endregion
 
     //#region Card search

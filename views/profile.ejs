@@ -41,7 +41,7 @@
             <tbody id="deckList">
               <% profile.decks.forEach(deck => { %>
               <tr>
-                <td class="align-middle py-2"><%= deck.title %></td>
+                <td class="align-middle py-2"><%- deck.title %></td>
                 <td class="align-middle py-2">
                   <a href="/deck/<%= deck.id %>" class="btn btn-success" role="button" data-toggle="tooltip" data-placement="top" title="Open"><i class="far fa-folder-open"></i></a>
                   <% if (user) { %>

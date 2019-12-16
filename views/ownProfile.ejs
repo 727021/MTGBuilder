@@ -76,7 +76,8 @@
           <div class="p-1">
             <p class="m-0"><b>Status:</b> <span id="statusDate" class="text-muted"><%= profile.status_date %></span></p>
             <textarea readonly class="pl-2 ml-2 mb-2 border-none border-left text-wrap noresize form-control-plaintext" id="status" rows="1"><%= profile.status %></textarea>
-            <form id="statusForm" action="/user"><textarea name="statusInput" id="statusInput" cols="16" rows="3" class="form-control noresize" maxlength="64" placeholder="Update your status"></textarea></form>
+            <form id="statusForm" action="/user"><textarea name="statusInput" id="statusInput" cols="16" rows="3" class="form-control noresize" maxlength="64" placeholder="Update your status
+(ENTER to submit)"></textarea></form>
             <p class="text-right text-muted m-0"><span id="charCount">0</span>/64</p>
           </div>
           <hr class="my-1">
