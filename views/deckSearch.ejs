@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="input-group">
                         <input class="form-control" type="text" name="deckTitle" id="deckTitle" placeholder="Title" value="<%= query %>">
-                        <select name="deckOwner" id="deckOwner">
+                        <select class="form-control" name="deckOwner" id="deckOwner">
                             <option value="" selected>-- Owner --</option>
                             <% users.forEach(u => { %>
                             <option value="<%= u.id %>"><%= u.username %></option>

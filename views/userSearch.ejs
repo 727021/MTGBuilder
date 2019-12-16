@@ -12,7 +12,7 @@
                 <div class="row">
                     <div class="input-group">
                         <input class="form-control" type="text" name="userName" id="userName" placeholder="Username" value="<%= query %>">
-                        <select name="userType" id="userType">
+                        <select class="form-control" name="userType" id="userType">
                             <option value="">-- User Type --</option>
                             <% locals.userTypes.forEach(type => { %>
                             <option value="<%= type.toLowerCase() %>"><%= type %></option>
