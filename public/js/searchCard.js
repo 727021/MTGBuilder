@@ -124,12 +124,19 @@ $(() => {
         let type = Number($('#cardType').val()) == -1 ? '' : cardTypes[Number($('#cardType').val())]
         let set = Number($('#cardSet').val()) == -1 ? '' : cardSets[Number($('#cardSet').val())]
         let rarity = Number($('#cardRarity').val()) == -1 ? '' : cardRarities[Number($('#cardRarity').val())]
+        let colors = []
+        if ($('#cardWhite')[0].checked) colors.push('white')
+        if ($('#cardBlue')[0].checked) colors.push('blue')
+        if ($('#cardBlack')[0].checked) colors.push('black')
+        if ($('#cardRed')[0].checked) colors.push('red')
+        if ($('#cardGreen')[0].checked) colors.push('green')
 
         $('#tbody').empty()
 
         cardCount = 0
         page = 1
-        q = `https://api.magicthegathering.io/v1/cards?name=${name}&type=${type}&set=${set}&rarity=${rarity}`
+        q = `https://api.magicthegathering.io/v1/cards?name=${name}&type=${type}&set=${set}&rarity=${rarity}&colors=${colors.join('|')}`
+        console.log(q)
         loadPage()
 
         return false
