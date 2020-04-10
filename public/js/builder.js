@@ -131,7 +131,7 @@ $(() => {
 
         cardCount = 0
         page = 1
-        q = `https://api.magicthegathering.io/v1/cards?name=${name}&type=${type}&set=${set}&rarity=${rarity}&colors=${colors.join(',')}`
+        q = `https://api.magicthegathering.io/v1/cards?name=${name}&type=${type}&set=${set}&rarity=${rarity}&colors=${colors.join('|')}`
         loadPage()
 
         return false
