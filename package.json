@@ -17,9 +17,9 @@
   },
   "homepage": "https://mtgbuilder.herokuapp.com/",
   "dependencies": {
-    "bcrypt": "^3.0.7",
-    "connect-pg-simple": "^6.0.1",
-    "cookie-parser": "~1.4.4",
+    "bcrypt": "^3.0.8",
+    "connect-pg-simple": "^6.1.0",
+    "cookie-parser": "^1.4.5",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
     "ejs": "~2.6.1",
@@ -28,8 +28,8 @@
     "http-errors": "~1.6.3",
     "morgan": "~1.9.1",
     "mtgsdk": "^0.4.3",
-    "node-postgres": "^0.1.2",
-    "pg": "^7.14.0",
-    "validator": "^12.1.0"
+    "node-postgres": "^0.1.4",
+    "pg": "^7.18.2",
+    "validator": "^12.2.0"
   }
 }
